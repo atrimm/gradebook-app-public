@@ -157,7 +157,7 @@ else:
         hide_index=True,
     )
 
-st.subheader("Grade Determination")
+st.subheader("Semester Grade Determination")
 
 st.dataframe(
     style_grade_determination_dataframe(level_fractions),
