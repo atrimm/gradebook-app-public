@@ -238,7 +238,7 @@ if eligibility_issues.empty:
     st.success("You are eligible for all upcoming progress checks.")
 else:
     st.info(
-        "You are ineligible to take a progress check on the following standards. "
+        "You are ineligible to take a progress check on the following standards due to the reasons listed below. "
         "Your next attempt on these standards will be on the final exam."
     )
 
