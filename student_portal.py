@@ -9,7 +9,6 @@ from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 from gradebook_logic import (
     get_student_dashboard_data,
     make_student_html_report,
-    make_student_text_report,
     style_grade_determination_dataframe,
     style_mastery_dataframe,
 )
@@ -255,19 +254,6 @@ else:
 
 student_display_name = f"{last_name}, {first_name}"
 
-student_report_text = make_student_text_report(
-    student_name=student_display_name,
-    mod=student_mod,
-    generated_at=datetime.now().strftime("%Y-%m-%d %I:%M %p"),
-    semester_grade=semester_grade,
-    grade_determination_df=level_fractions,
-    current_scores_df=student_current_scores,
-    score_history_df=score_history,
-    general_comments_df=general_comments,
-    assessment_absences_df=absence_history,
-    progress_check_issues_df=eligibility_issues,
-)
-
 student_report_html = make_student_html_report(
     student_name=student_display_name,
     mod=student_mod,
@@ -284,13 +270,6 @@ student_report_html = make_student_html_report(
 with st.expander("Student Report Export"):
     st.download_button(
         "Download Student Report",
-        data=student_report_text,
-        file_name=f"{student_id}_student_report.txt",
-        mime="text/plain",
-    )
-
-    st.download_button(
-        "Download Student Report as HTML",
         data=student_report_html,
         file_name=f"{student_id}_student_report.html",
         mime="text/html",
