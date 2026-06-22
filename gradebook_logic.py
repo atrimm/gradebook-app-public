@@ -453,11 +453,18 @@ def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
 
 
 def style_semester_grade_threshold_dataframe(df, grade_thresholds):
+    current_row_divider = "border-bottom: 4px double #444;"
+
+    def add_current_row_divider(style_string):
+        if style_string:
+            return f"{style_string} {current_row_divider}"
+        return current_row_divider
+
     def color_threshold_rows(row):
         styles = [""] * len(row)
 
         if row["Grade"] == "Your Current Percentage":
-            styles[0] = "font-weight: bold;"
+            styles[0] = add_current_row_divider("font-weight: bold;")
 
             for column_index, column_name in enumerate(row.index):
                 if column_name == "Grade":
@@ -466,6 +473,7 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
                 current_value = row[column_name]
 
                 if current_value == "—":
+                    styles[column_index] = add_current_row_divider("")
                     continue
 
                 current_fraction = int(current_value.replace("%", "")) / 100
@@ -486,23 +494,25 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
                         break
 
                 if highest_grade_met == "A":
-                    styles[column_index] = (
+                    styles[column_index] = add_current_row_divider(
                         "background-color: #00ff00; font-weight: bold;"
                     )
                 elif highest_grade_met == "B":
-                    styles[column_index] = (
+                    styles[column_index] = add_current_row_divider(
                         "background-color: #b7e1cd; font-weight: bold;"
                     )
                 elif highest_grade_met == "C":
-                    styles[column_index] = (
+                    styles[column_index] = add_current_row_divider(
                         "background-color: #ffff00; font-weight: bold;"
                     )
                 elif highest_grade_met == "C-":
-                    styles[column_index] = (
+                    styles[column_index] = add_current_row_divider(
                         "background-color: #ff9900; font-weight: bold;"
                     )
                 else:
-                    styles[column_index] = "font-weight: bold;"
+                    styles[column_index] = add_current_row_divider(
+                        "font-weight: bold;"
+                    )
 
             return styles
 
@@ -518,7 +528,7 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
         return styles
 
     return df.style.apply(color_threshold_rows, axis=1)
-
+    
 def backup_gradebook(csv_path, max_backups=50):
     backup_dir = csv_path.parent / "backups"
     backup_dir.mkdir(exist_ok=True)
