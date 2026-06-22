@@ -8,7 +8,7 @@ from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 
 from gradebook_logic import (
     get_student_dashboard_data,
-    make_student_html_report,
+    make_student_html_report_for_students,
     style_grade_determination_dataframe,
     style_mastery_dataframe,
 )
@@ -254,7 +254,7 @@ else:
 
 student_display_name = f"{last_name}, {first_name}"
 
-student_report_html = make_student_html_report(
+student_report_html = make_student_html_report_for_students(
     student_name=student_display_name,
     mod=student_mod,
     generated_at=datetime.now().strftime("%Y-%m-%d %I:%M %p"),
@@ -263,7 +263,6 @@ student_report_html = make_student_html_report(
     current_scores_df=student_current_scores,
     score_history_df=score_history,
     general_comments_df=general_comments,
-    assessment_absences_df=absence_history,
     progress_check_issues_df=eligibility_issues,
 )
 
