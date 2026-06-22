@@ -17,7 +17,6 @@ from gradebook_logic import (
     get_student_level_fractions,
     color_mastery_scores,
     style_mastery_dataframe,
-    style_grade_determination_dataframe,
     backup_gradebook,
     backup_gradebook_to_google_drive,
     list_google_drive_backups,
