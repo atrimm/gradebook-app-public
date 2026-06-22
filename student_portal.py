@@ -243,7 +243,7 @@ else:
     )
 
     display_df = eligibility_issues[
-        ["standard", "assignment_name"]
+        ["standard", "eligibility_reason"]
     ].copy()
 
     display_df.columns = [
