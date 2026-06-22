@@ -1147,3 +1147,39 @@ def list_google_drive_backups():
     ).execute()
 
     return results.get("files", [])
+
+def restore_google_drive_backup(backup_file_id):
+    import io
+
+    import pandas as pd
+    import streamlit as st
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+    from googleapiclient.http import MediaIoBaseDownload
+
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/drive"],
+    )
+
+    service = build("drive", "v3", credentials=credentials)
+
+    request = service.files().get_media(
+        fileId=backup_file_id,
+        supportsAllDrives=True,
+    )
+
+    file_buffer = io.BytesIO()
+    downloader = MediaIoBaseDownload(file_buffer, request)
+
+    done = False
+    while not done:
+        _, done = downloader.next_chunk()
+
+    file_buffer.seek(0)
+    restored_gradebook = pd.read_csv(file_buffer)
+
+    backup_gradebook_to_google_drive()
+    save_gradebook_to_google_drive(restored_gradebook)
+
+    return restored_gradebook
