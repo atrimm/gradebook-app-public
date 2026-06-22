@@ -478,10 +478,11 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
                         None,
                     )
 
-                    if (
-                        required_fraction is not None
-                        and current_fraction >= required_fraction
-                    ):
+                    if required_fraction is None:
+                        highest_grade_met = letter_grade
+                        break
+                    
+                    if current_fraction >= required_fraction:
                         highest_grade_met = letter_grade
                         break
 
