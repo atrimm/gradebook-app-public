@@ -1100,4 +1100,24 @@ def save_gradebook_to_google_drive(gradebook):
     )
 
 def backup_gradebook_to_google_drive():
-    return None
+    from datetime import datetime
+
+    import streamlit as st
+
+    gradebook = read_csv_from_google_drive(
+        "gradebook.csv",
+        st.secrets["DRIVE_FOLDER_ID"],
+    )
+
+    backups_folder_id = st.secrets["BACKUPS_FOLDER_ID"]
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    backup_file_name = f"gradebook_backup_{timestamp}.csv"
+
+    write_csv_to_google_drive(
+        gradebook,
+        backup_file_name,
+        backups_folder_id,
+    )
+
+    return backup_file_name
