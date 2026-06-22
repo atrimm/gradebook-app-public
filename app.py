@@ -46,10 +46,10 @@ from gradebook_logic import (
 
 from grading_config import GRADE_THRESHOLDS, GRADING_RUBRIC
 
-st.set_page_config(
-    page_title="Standards-Based Gradebook",
-    layout="wide",
-)
+#st.set_page_config(
+ #   page_title="Standards-Based Gradebook",
+  #  layout="wide",
+#)
 
 if not st.user.get("is_logged_in", False):
     st.title("Teacher Gradebook")
