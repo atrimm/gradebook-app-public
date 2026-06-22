@@ -226,7 +226,7 @@ st.dataframe(
     hide_index=True,
 )
 
-st.subheader("Progress Check Eligibility Issues")
+st.subheader("Progress Check Eligibility")
 
 if eligibility_issues.empty:
     st.info("No progress check eligibility issues.")
