@@ -420,9 +420,10 @@ def make_grading_rubric_dataframe(grading_rubric):
 
 
 def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
-    current_grade = "Below C-"
+    current_grade = "D"
 
     for letter_grade in ["A", "B", "C", "C-"]:
+            
         if (level_fractions["Threshold Met"] == letter_grade).all():
             current_grade = letter_grade
             break
@@ -464,6 +465,19 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
         styles = [""] * len(row)
 
         if row["Grade"].startswith("Current Grade:"):
+            current_grade = row["Grade"].replace("Current Grade:", "").strip()
+
+        if current_grade == "A":
+            styles[0] = "background-color: #00ff00; font-weight: bold;"
+        elif current_grade == "B":
+            styles[0] = "background-color: #b7e1cd; font-weight: bold;"
+        elif current_grade == "C":
+            styles[0] = "background-color: #ffff00; font-weight: bold;"
+        elif current_grade == "C-":
+            styles[0] = "background-color: #ff9900; font-weight: bold;"
+        elif current_grade == "D":
+            styles[0] = "background-color: #ff0000; font-weight: bold;"
+        else:
             styles[0] = "font-weight: bold;"
 
             for column_index, column_name in enumerate(row.index):
