@@ -8,7 +8,6 @@ from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 
 from gradebook_logic import (
     get_student_dashboard_data,
-    make_student_html_report_for_students,
     style_grade_determination_dataframe,
     style_mastery_dataframe,
 )
@@ -272,23 +271,4 @@ else:
         hide_index=True,
     )
 
-student_display_name = f"{last_name}, {first_name}"
-
-student_report_html = make_student_html_report_for_students(
-    student_name=student_display_name,
-    mod=student_mod,
-    generated_at=datetime.now().strftime("%Y-%m-%d %I:%M %p"),
-    semester_grade=semester_grade,
-    grade_determination_df=level_fractions,
-    current_scores_df=student_current_scores,
-    score_history_df=score_history,
-    general_comments_df=general_comments,
-    progress_check_issues_df=eligibility_issues,
-)
-
-st.download_button(
-    "Download Grade Report",
-    data=student_report_html,
-    file_name=f"{student_id}_student_report.html",
-    mime="text/html",
-)   
+   

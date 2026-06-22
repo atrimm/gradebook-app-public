@@ -899,30 +899,6 @@ def make_student_html_report(
 
     return html
 
-def make_student_html_report_for_students(
-    student_name,
-    mod,
-    generated_at,
-    semester_grade,
-    grade_determination_df,
-    current_scores_df,
-    score_history_df,
-    general_comments_df,
-    progress_check_issues_df,
-):
-    return make_student_html_report(
-        student_name=student_name,
-        mod=mod,
-        generated_at=generated_at,
-        semester_grade=semester_grade,
-        grade_determination_df=grade_determination_df,
-        current_scores_df=current_scores_df,
-        score_history_df=score_history_df,
-        general_comments_df=general_comments_df,
-        assessment_absences_df=pd.DataFrame(),
-        progress_check_issues_df=progress_check_issues_df,
-    )
-
 def rename_assignment_in_gradebook(
     gradebook,
     selected_mod,
