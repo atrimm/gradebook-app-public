@@ -14,7 +14,6 @@ from gradebook_logic import (
     get_progress_check_eligibility_issues,
     get_assessment_absence_history,
     get_student_level_fractions,
-    get_student_level_fractions,
     color_mastery_scores,
     style_mastery_dataframe,
     backup_gradebook,
