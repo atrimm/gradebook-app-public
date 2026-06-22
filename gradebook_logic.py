@@ -422,9 +422,27 @@ def make_grading_rubric_dataframe(grading_rubric):
 def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
     current_grade = "D"
 
+    current_fractions = {
+        row["Level"]: row["Fraction Met"]
+        for _, row in level_fractions.iterrows()
+    }
+    
     for letter_grade in ["A", "B", "C", "C-"]:
-            
-        if (level_fractions["Threshold Met"] == letter_grade).all():
+        thresholds = grade_thresholds[letter_grade]
+        meets_all_thresholds = True
+    
+        for level_number in [1, 2, 3, 4]:
+            column_name = f"{level_number} or above"
+            required_fraction = thresholds.get(f"frac{level_number}", None)
+    
+            if required_fraction is None:
+                continue
+    
+            if current_fractions.get(column_name, 0) < required_fraction:
+                meets_all_thresholds = False
+                break
+    
+        if meets_all_thresholds:
             current_grade = letter_grade
             break
 
