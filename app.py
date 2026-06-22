@@ -216,7 +216,7 @@ elif view == "Student":
             hide_index=True,
         )
 
-        st.subheader("Progress Check Eligibility Issues")
+        st.subheader("Progress Check Eligibility")
 
         eligibility_issues = get_progress_check_eligibility_issues(
             active_mod_gradebook,
