@@ -218,27 +218,55 @@ for letter_grade, thresholds in GRADE_THRESHOLDS.items():
 threshold_df = pd.DataFrame(threshold_rows)
 
 def color_threshold_rows(row):
-    grade_label = row["Grade"]
+    styles = [""] * len(row)
 
-    if grade_label == "Your Current Percentage":
-        return ["font-weight: bold;"] * len(row)
+    if row["Grade"] == "Your Current Percentage":
+        styles[0] = "font-weight: bold;"
 
-    if grade_label.startswith("A"):
+        for column_index, column_name in enumerate(row.index):
+            if column_name == "Grade":
+                continue
+
+            current_value = row[column_name]
+
+            if current_value == "—":
+                continue
+
+            current_fraction = int(current_value.replace("%", "")) / 100
+
+            highest_grade_met = None
+
+            for letter_grade, thresholds in GRADE_THRESHOLDS.items():
+                level_number = column_name.split()[0]
+                required_fraction = thresholds.get(f"frac{level_number}", None)
+
+                if required_fraction is not None and current_fraction >= required_fraction:
+                    highest_grade_met = letter_grade
+                    break
+
+            if highest_grade_met == "A":
+                styles[column_index] = "background-color: #00ff00; font-weight: bold;"
+            elif highest_grade_met == "B":
+                styles[column_index] = "background-color: #b7e1cd; font-weight: bold;"
+            elif highest_grade_met == "C":
+                styles[column_index] = "background-color: #ffff00; font-weight: bold;"
+            elif highest_grade_met == "C-":
+                styles[column_index] = "background-color: #ff9900; font-weight: bold;"
+            else:
+                styles[column_index] = "font-weight: bold;"
+
+        return styles
+
+    if row["Grade"].startswith("A"):
         return ["background-color: #00ff00;"] * len(row)
-    if grade_label.startswith("B"):
+    if row["Grade"].startswith("B"):
         return ["background-color: #b7e1cd;"] * len(row)
-    if grade_label.startswith("C-"):
+    if row["Grade"].startswith("C-"):
         return ["background-color: #ff9900;"] * len(row)
-    if grade_label.startswith("C"):
+    if row["Grade"].startswith("C"):
         return ["background-color: #ffff00;"] * len(row)
 
-    return [""] * len(row)
-
-st.dataframe(
-    threshold_df.style.apply(color_threshold_rows, axis=1),
-    use_container_width=True,
-    hide_index=True,
-)
+    return styles
 
 st.subheader("Score History")
 
