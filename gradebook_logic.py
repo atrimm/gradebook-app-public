@@ -420,8 +420,15 @@ def make_grading_rubric_dataframe(grading_rubric):
 
 
 def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
+    current_grade = "Below C-"
+
+    for letter_grade in ["A", "B", "C", "C-"]:
+        if (level_fractions["Threshold Met"] == letter_grade).all():
+            current_grade = letter_grade
+            break
+
     current_percentages = {
-        "Grade": "Your Current Percentage",
+        "Grade": f"Current Grade: {current_grade}",
         "1 or above": "—",
         "2 or above": "—",
         "3 or above": "—",
@@ -456,7 +463,7 @@ def style_semester_grade_threshold_dataframe(df, grade_thresholds):
     def color_threshold_rows(row):
         styles = [""] * len(row)
 
-        if row["Grade"] == "Your Current Percentage":
+        if row["Grade"].startswith("Current Grade:"):
             styles[0] = "font-weight: bold;"
 
             for column_index, column_name in enumerate(row.index):
