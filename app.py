@@ -39,7 +39,12 @@ from gradebook_logic import (
     restore_google_drive_backup,
     restore_latest_google_drive_backup,
     compare_current_gradebook_to_google_drive_backup,
+    make_grading_rubric_dataframe,
+    make_semester_grade_threshold_dataframe,
+    style_semester_grade_threshold_dataframe,
 )
+
+from grading_config import GRADE_THRESHOLDS, GRADING_RUBRIC
 
 if not st.user.get("is_logged_in", False):
     st.title("Teacher Gradebook")
@@ -181,37 +186,57 @@ elif view == "Student":
 
         semester_grade = student_grade_table["semester_grade"].iloc[0]
 
-        st.metric("Semester Grade", semester_grade)
+        st.subheader("Semester Grade")
+        st.markdown(f"# {semester_grade}")
 
         student_current_scores = make_current_scores_wide(student_rows)
 
-        st.subheader("Grade Determination")
+        st.subheader("Current Scores")
+
+        if student_current_scores.empty:
+            st.info("No current scores found.")
+        else:
+            display_scores = student_current_scores.drop(
+                columns=["student_id", "first_name", "last_name", "mod"],
+                errors="ignore",
+            )
+
+            st.dataframe(
+                style_mastery_dataframe(display_scores),
+                use_container_width=True,
+                hide_index=True,
+            )
 
         level_fractions = get_student_level_fractions(student_current_scores)
 
+        st.markdown("### Rubric")
+        st.markdown("Each standard is scored according to the following rubric.")
+
+        rubric_df = make_grading_rubric_dataframe(GRADING_RUBRIC)
+
         st.dataframe(
-            style_grade_determination_dataframe(level_fractions),
+            rubric_df,
             use_container_width=True,
             hide_index=True,
         )
 
-        st.subheader("Current Scores")
+        st.subheader("Semester Grade Determination")
 
-        st.dataframe(
-            style_mastery_dataframe(student_current_scores),
-            use_container_width=True,
-            hide_index=True,
+        st.markdown(
+            "Your current percentages are shown in the first row. "
+            "To earn a letter grade, your percentages must meet or exceed every required entry in that letter grade row."
         )
 
-        st.subheader("Score History")
-
-        score_history = get_score_history(
-            active_mod_gradebook,
-            selected_student_id
+        threshold_df = make_semester_grade_threshold_dataframe(
+            level_fractions,
+            GRADE_THRESHOLDS,
         )
 
         st.dataframe(
-            style_mastery_dataframe(score_history),
+            style_semester_grade_threshold_dataframe(
+                threshold_df,
+                GRADE_THRESHOLDS,
+            ),
             use_container_width=True,
             hide_index=True,
         )
@@ -224,7 +249,7 @@ elif view == "Student":
         )
 
         if eligibility_issues.empty:
-            st.info("No progress check eligibility issues.")
+            st.info("You are eligible for all upcoming progress checks.")
         else:
             st.dataframe(
                 eligibility_issues,
@@ -248,7 +273,6 @@ elif view == "Student":
                 hide_index=True,
             )
 
-        
         st.subheader("General Comments")
 
         general_comments = get_general_comments(
@@ -264,6 +288,19 @@ elif view == "Student":
                 use_container_width=True,
                 hide_index=True
             )
+
+        st.subheader("Score History")
+
+        score_history = get_score_history(
+            active_mod_gradebook,
+            selected_student_id
+        )
+
+        st.dataframe(
+            style_mastery_dataframe(score_history),
+            use_container_width=True,
+            hide_index=True,
+        )
 
         student_report_text = make_student_text_report(
             student_name=selected_student_name,
