@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from grading_config import GRADEBOOK_CSV_PATH
+from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS
 
 from gradebook_logic import (
     get_student_dashboard_data,
@@ -62,6 +62,40 @@ if not test_email.endswith("@imsa.edu"):
 
 st.sidebar.header("Signed in")
 st.sidebar.write(test_email)
+
+st.sidebar.divider()
+
+st.sidebar.header("Grade Thresholds")
+
+for letter_grade, thresholds in GRADE_THRESHOLDS.items():
+    st.sidebar.markdown(f"**{letter_grade}**")
+    for level_key, fraction in thresholds.items():
+        level_number = level_key.replace("frac", "")
+        percent = int(round(100 * fraction))
+        st.sidebar.write(f"Level {level_number}: {percent}%")
+
+st.sidebar.divider()
+
+st.sidebar.header("Rubric")
+
+st.sidebar.markdown(
+    """
+**4 — Distinguished**  
+Consistently demonstrates deep understanding.
+
+**3 — Advancing**  
+Demonstrates strong understanding.
+
+**2 — Proficient**  
+Demonstrates essential understanding.
+
+**1 — Developing**  
+Shows partial understanding.
+
+**0 — Beginning / No Evidence**  
+No evidence yet or not yet assessable.
+"""
+)
 
 is_admin = test_email == "atrimm@imsa.edu"
 show_diagnostics = False
