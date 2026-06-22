@@ -247,12 +247,28 @@ elif view == "Student":
             active_mod_gradebook,
             selected_student_id,
         )
-
+        
         if eligibility_issues.empty:
             st.info("You are eligible for all upcoming progress checks.")
         else:
+            st.info(
+                "You are currently ineligible for progress checks on the following standards. "
+                "Your next attempt on these standards will be on the final exam."
+            )
+        
+            display_eligibility_issues = eligibility_issues.rename(
+                columns={
+                    "standard": "Standard",
+                    "eligibility_reason": "Incomplete Assignment",
+                }
+            )
+        
+            display_eligibility_issues = display_eligibility_issues[
+                ["Standard", "Incomplete Assignment"]
+            ]
+        
             st.dataframe(
-                eligibility_issues,
+                display_eligibility_issues,
                 use_container_width=True,
                 hide_index=True,
             )
