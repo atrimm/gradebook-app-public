@@ -263,7 +263,6 @@ student_report_html = make_student_html_report(
     current_scores_df=student_current_scores,
     score_history_df=score_history,
     general_comments_df=general_comments,
-    assessment_absences_df=absence_history,
     progress_check_issues_df=eligibility_issues,
 )
 
