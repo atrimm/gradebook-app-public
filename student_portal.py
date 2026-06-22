@@ -231,7 +231,7 @@ st.dataframe(
 )
 
 st.subheader("Progress Check Eligibility")
-st.markdown("To be eligible for a progress check, all corresponding classwork and homework assignments must be complete before the initial check, corrections of the intial check must be made, and additional practice completed."
+st.markdown("To be eligible for a progress check, all corresponding classwork and homework assignments must be complete before the initial check, corrections of the intial check must be made, and additional practice completed.")
 
 if eligibility_issues.empty:
     st.info("You are eligible for all upcoming progress checks.")
