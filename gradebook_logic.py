@@ -1120,6 +1120,8 @@ def backup_gradebook_to_google_drive():
         backups_folder_id,
     )
 
+    keep_most_recent_google_drive_backups(max_backups=50)
+
     return backup_file_name
 
 def list_google_drive_backups():
@@ -1261,3 +1263,30 @@ def compare_current_gradebook_to_google_drive_backup(backup_file_id):
     ].drop(columns=["_merge"])
 
     return rows_only_in_current, rows_only_in_backup
+
+def keep_most_recent_google_drive_backups(max_backups=50):
+    import streamlit as st
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+
+    backups = list_google_drive_backups()
+
+    if len(backups) <= max_backups:
+        return 0
+
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/drive"],
+    )
+
+    service = build("drive", "v3", credentials=credentials)
+
+    backups_to_delete = backups[max_backups:]
+
+    for backup in backups_to_delete:
+        service.files().delete(
+            fileId=backup["id"],
+            supportsAllDrives=True,
+        ).execute()
+
+    return len(backups_to_delete)
