@@ -8,7 +8,6 @@ from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 
 from gradebook_logic import (
     get_student_dashboard_data,
-    style_grade_determination_dataframe,
     style_mastery_dataframe,
     make_grading_rubric_dataframe,
     make_semester_grade_threshold_dataframe,
