@@ -68,7 +68,8 @@ st.sidebar.divider()
 with st.sidebar.expander("How grades are determined", expanded=False):
 
     st.markdown("### Rubric")
-
+    st.markdown("Each standard is scored according to the following rubric.")
+    
     rubric_rows = [
         {
             "Score": score,
@@ -105,7 +106,9 @@ with st.sidebar.expander("How grades are determined", expanded=False):
 
     threshold_df = pd.DataFrame(threshold_rows)
 
-    st.markdown("A student must satisfy the full row to earn the corresponding letter grade. Each entry shows the percentage of standards met at the corresponding level.")
+    st.markdown("A student must satisfy the full row to earn the corresponding letter grade. 
+    
+        Each entry shows the percentage of standards met at the given level.")
     st.dataframe(
         threshold_df,
         use_container_width=True,
