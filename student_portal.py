@@ -189,7 +189,7 @@ st.dataframe(
     hide_index=True,
 )
     
-st.markdown("### Semester Grade Determination")
+st.markdown("### Letter Grade Thresholds")
 
     
 threshold_rows = []
