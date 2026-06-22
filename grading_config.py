@@ -28,3 +28,26 @@ GRADE_THRESHOLDS = {
     }
 }
 
+GRADING_RUBRIC = {
+    4: {
+        "level": "Distinguished",
+        "description": "Consistently demonstrates deep understanding and flexible command of the standard.",
+    },
+    3: {
+        "level": "Advancing",
+        "description": "Demonstrates strong understanding of the standard with only minor gaps.",
+    },
+    2: {
+        "level": "Proficient",
+        "description": "Demonstrates the essential understanding needed for the standard.",
+    },
+    1: {
+        "level": "Developing",
+        "description": "Shows partial understanding, but important gaps remain.",
+    },
+    0: {
+        "level": "Beginning / No Evidence",
+        "description": "No evidence yet, insufficient evidence, or not yet assessable.",
+    },
+}
+

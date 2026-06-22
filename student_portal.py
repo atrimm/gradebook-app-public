@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS
+from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 
 from gradebook_logic import (
     get_student_dashboard_data,
@@ -65,37 +65,50 @@ st.sidebar.write(test_email)
 
 st.sidebar.divider()
 
-st.sidebar.header("Grade Thresholds")
+with st.sidebar.expander("How grades are determined", expanded=False):
 
-for letter_grade, thresholds in GRADE_THRESHOLDS.items():
-    st.sidebar.markdown(f"**{letter_grade}**")
-    for level_key, fraction in thresholds.items():
-        level_number = level_key.replace("frac", "")
-        percent = int(round(100 * fraction))
-        st.sidebar.write(f"Level {level_number}: {percent}%")
+    threshold_rows = []
 
-st.sidebar.divider()
+    for letter_grade, thresholds in GRADE_THRESHOLDS.items():
+        row = {"Grade": letter_grade}
 
-st.sidebar.header("Rubric")
+        for level_number in [1, 2, 3, 4]:
+            fraction = thresholds.get(f"frac{level_number}", None)
 
-st.sidebar.markdown(
-    """
-**4 — Distinguished**  
-Consistently demonstrates deep understanding.
+            if fraction is None:
+                row[f"Level {level_number}"] = "—"
+            else:
+                row[f"Level {level_number}"] = f"{int(round(100 * fraction))}%"
 
-**3 — Advancing**  
-Demonstrates strong understanding.
+        threshold_rows.append(row)
 
-**2 — Proficient**  
-Demonstrates essential understanding.
+    threshold_df = pd.DataFrame(threshold_rows)
 
-**1 — Developing**  
-Shows partial understanding.
+    st.markdown("A student must satisfy the full row to earn that grade.")
+    st.dataframe(
+        threshold_df,
+        use_container_width=True,
+        hide_index=True,
+    )
 
-**0 — Beginning / No Evidence**  
-No evidence yet or not yet assessable.
-"""
-)
+    st.markdown("### Rubric")
+
+    rubric_rows = [
+        {
+            "Score": score,
+            "Level": rubric_item["level"],
+            "Description": rubric_item["description"],
+        }
+        for score, rubric_item in GRADING_RUBRIC.items()
+    ]
+
+    rubric_df = pd.DataFrame(rubric_rows)
+
+    st.dataframe(
+        rubric_df,
+        use_container_width=True,
+        hide_index=True,
+    )
 
 is_admin = test_email == "atrimm@imsa.edu"
 show_diagnostics = False
