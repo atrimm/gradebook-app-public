@@ -236,7 +236,7 @@ st.markdown("""To be eligible for a progress check on a given standard, a studen
 - Complete corrections of the initial check. 
 - Complete all additional practice assigned to help prepare for the progress check.
 
-If any of these are not met, the next and final attempt on that standard will be on the final exam.""")
+If any of these requirements are not met, then the student is not eligible for the progress check and their next and final attempt on that standard will be on the final exam.""")
 
 if eligibility_issues.empty:
     st.success("You are eligible for all upcoming progress checks.")
