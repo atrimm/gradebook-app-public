@@ -163,7 +163,7 @@ st.markdown("To earn a given letter grade, all rows of the table must meet the t
 
 display_level_fractions = level_fractions.rename(
     columns={
-        "Fraction Met": "Percent of Standards Met"
+        "Fraction Met": "Percentage of Standards Met"
     }
 )
 

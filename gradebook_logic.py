@@ -390,8 +390,8 @@ def style_grade_determination_dataframe(df):
 
     if "Fraction Met" in df.columns:
         percent_column = "Fraction Met"
-    elif "Percent of Standards Met" in df.columns:
-        percent_column = "Percent of Standards Met"
+    elif "Percentage of Standards Met" in df.columns:
+        percent_column = "Percentage of Standards Met"
 
     if percent_column:
         styled_df = styled_df.format(
