@@ -1195,3 +1195,69 @@ def restore_latest_google_drive_backup():
     restore_google_drive_backup(latest_backup["id"])
 
     return latest_backup["name"]
+
+def read_google_drive_backup_by_id(backup_file_id):
+    import io
+
+    import pandas as pd
+    import streamlit as st
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+    from googleapiclient.http import MediaIoBaseDownload
+
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/drive.readonly"],
+    )
+
+    service = build("drive", "v3", credentials=credentials)
+
+    request = service.files().get_media(
+        fileId=backup_file_id,
+        supportsAllDrives=True,
+    )
+
+    file_buffer = io.BytesIO()
+    downloader = MediaIoBaseDownload(file_buffer, request)
+
+    done = False
+    while not done:
+        _, done = downloader.next_chunk()
+
+    file_buffer.seek(0)
+
+    return pd.read_csv(file_buffer)
+
+
+def compare_current_gradebook_to_google_drive_backup(backup_file_id):
+    import streamlit as st
+
+    current_gradebook = read_csv_from_google_drive(
+        "gradebook.csv",
+        st.secrets["DRIVE_FOLDER_ID"],
+    )
+
+    backup_gradebook = read_google_drive_backup_by_id(backup_file_id)
+
+    current_rows = current_gradebook.astype(str)
+    backup_rows = backup_gradebook.astype(str)
+
+    rows_only_in_current = current_rows.merge(
+        backup_rows.drop_duplicates(),
+        how="left",
+        indicator=True,
+    )
+    rows_only_in_current = rows_only_in_current[
+        rows_only_in_current["_merge"] == "left_only"
+    ].drop(columns=["_merge"])
+
+    rows_only_in_backup = backup_rows.merge(
+        current_rows.drop_duplicates(),
+        how="left",
+        indicator=True,
+    )
+    rows_only_in_backup = rows_only_in_backup[
+        rows_only_in_backup["_merge"] == "left_only"
+    ].drop(columns=["_merge"])
+
+    return rows_only_in_current, rows_only_in_backup
