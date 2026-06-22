@@ -192,8 +192,7 @@ st.dataframe(
 )
     
 st.markdown("### Semester Grade Determination")
-st.markdown("A student must complete the entire row to earn the corresponding letter grade.")
-st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
+
     
 threshold_rows = []
     
@@ -213,9 +212,10 @@ for letter_grade, thresholds in GRADE_THRESHOLDS.items():
     threshold_rows.append(row)
 
 threshold_df = pd.DataFrame(threshold_rows)
-    
-st.markdown("A student must complete the full row of the following table to earn the corresponding letter grade.")
-    
+
+st.markdown("A student must complete the entire row of the following table to earn the corresponding letter grade.")
+st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
+
 st.dataframe(
     threshold_df,
     use_container_width=True,
