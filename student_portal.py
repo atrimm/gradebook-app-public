@@ -232,7 +232,7 @@ st.dataframe(
 st.subheader("Progress Check Eligibility")
 st.markdown("A progress check is given approximately one week after the initial check is returned. The final exam will serve as a final progress check on all standards.")
 st.markdown("""To be eligible for a progress check on a given standard, a student must:
-- Complete all corresponding classwork and homework assignments before the initial check. 
+- Complete all corresponding classwork and homework assignments *before* the initial check. 
 - Complete corrections of the initial check. 
 - Complete all additional practice assigned to help prepare for the progress check.
 
