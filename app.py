@@ -1081,33 +1081,33 @@ elif view == "Backup Manager":
     st.write(f"Found {len(backups)} backups.")
 
     if backups:
-    backup_options = {
-        f"{backup['name']} — {backup['createdTime']}": backup["id"]
-        for backup in backups
-    }
-
-    selected_backup_label = st.selectbox(
-        "Backup to restore",
-        list(backup_options.keys()),
-    )
-
-    st.warning(
-        "Restoring a backup will replace the current gradebook. "
-        "A backup of the current gradebook will be created first."
-    )
-
-    confirm_restore = st.checkbox(
-        "I understand and want to restore this backup."
-    )
-
-    if st.button("Restore Selected Backup"):
-        if confirm_restore:
-            restore_google_drive_backup(
-                backup_options[selected_backup_label]
-            )
-            st.success("Backup restored. Reload the app to view restored data.")
-            st.rerun()
-        else:
-            st.error("Check the confirmation box before restoring.")
-else:
-    st.info("No backups found.")
+        backup_options = {
+            f"{backup['name']} — {backup['createdTime']}": backup["id"]
+            for backup in backups
+        }
+    
+        selected_backup_label = st.selectbox(
+            "Backup to restore",
+            list(backup_options.keys()),
+        )
+    
+        st.warning(
+            "Restoring a backup will replace the current gradebook. "
+            "A backup of the current gradebook will be created first."
+        )
+    
+        confirm_restore = st.checkbox(
+            "I understand and want to restore this backup."
+        )
+    
+        if st.button("Restore Selected Backup"):
+            if confirm_restore:
+                restore_google_drive_backup(
+                    backup_options[selected_backup_label]
+                )
+                st.success("Backup restored. Reload the app to view restored data.")
+                st.rerun()
+            else:
+                st.error("Check the confirmation box before restoring.")
+    else:
+        st.info("No backups found.")
