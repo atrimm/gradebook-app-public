@@ -241,17 +241,6 @@ else:
         hide_index=True,
     )
 
-st.subheader("Assessment Absences")
-
-if absence_history.empty:
-    st.info("No assessment absences recorded.")
-else:
-    st.dataframe(
-        absence_history,
-        use_container_width=True,
-        hide_index=True,
-    )
-
 st.subheader("General Comments")
 
 if general_comments.empty:
