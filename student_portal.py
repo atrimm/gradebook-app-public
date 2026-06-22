@@ -141,7 +141,7 @@ eligibility_issues = dashboard_data["eligibility_issues"]
 absence_history = dashboard_data["absence_history"]
 general_comments = dashboard_data["general_comments"]
 
-st.metric("###Semester Grade", semester_grade)
+st.metric("Semester Grade", semester_grade)
 
 st.subheader("Current Scores")
 
