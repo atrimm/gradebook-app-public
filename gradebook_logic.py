@@ -1183,3 +1183,15 @@ def restore_google_drive_backup(backup_file_id):
     save_gradebook_to_google_drive(restored_gradebook)
 
     return restored_gradebook
+
+def restore_latest_google_drive_backup():
+    backups = list_google_drive_backups()
+
+    if not backups:
+        raise FileNotFoundError("No backups found.")
+
+    latest_backup = backups[0]
+
+    restore_google_drive_backup(latest_backup["id"])
+
+    return latest_backup["name"]
