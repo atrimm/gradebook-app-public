@@ -20,6 +20,7 @@ from gradebook_logic import (
     style_grade_determination_dataframe,
     backup_gradebook,
     backup_gradebook_to_google_drive,
+    list_google_drive_backups,
     save_gradebook_to_google_drive,
     summarize_gradebook_csv,
     compare_gradebook_csvs,
@@ -1074,7 +1075,15 @@ elif view == "Backup Manager":
 
     st.subheader("Backup Manager")
 
-    st.info(
-        "Google Drive backups are being created automatically before each save. "
-        "Drive-based restore and comparison tools will be added next."
-    )
+    backups = list_google_drive_backups()
+
+    st.write(f"Found {len(backups)} backups.")
+
+    if backups:
+        backup_df = pd.DataFrame(backups)
+        st.dataframe(
+            backup_df[["name", "createdTime"]],
+            use_container_width=True,
+        )
+    else:
+        st.info("No backups found.")
