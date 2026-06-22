@@ -388,7 +388,7 @@ def style_grade_determination_dataframe(df):
 
     if "Fraction Met" in df.columns:
         styled_df = styled_df.format(
-            {"Percentage Met": "{:.0%}"}
+            {"Fraction Met": "{:.0%}"}
         )
 
     if "Threshold Met" in df.columns:
