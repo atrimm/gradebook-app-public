@@ -1052,6 +1052,8 @@ def write_csv_to_google_drive(df, file_name, folder_id):
         q=query,
         fields="files(id, name)",
         pageSize=10,
+        supportsAllDrives=True,
+        includeItemsFromAllDrives=True,
     ).execute()
 
     files = results.get("files", [])
@@ -1070,6 +1072,7 @@ def write_csv_to_google_drive(df, file_name, folder_id):
         service.files().update(
             fileId=file_id,
             media_body=media,
+            supportsAllDrives=True,
         ).execute()
     else:
         file_metadata = {
@@ -1082,6 +1085,7 @@ def write_csv_to_google_drive(df, file_name, folder_id):
             body=file_metadata,
             media_body=media,
             fields="id",
+            supportsAllDrives=True,
         ).execute()
 
 def save_gradebook_to_google_drive(gradebook):
