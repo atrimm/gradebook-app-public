@@ -237,6 +237,7 @@ st.markdown("If you are ineligible for a progress check on a given standard, the
 if eligibility_issues.empty:
     st.info("You are eligible for all upcoming progress checks.")
 else:
+    st.info("You are ineligible to take a progress check on the following standards due to the reasons listed below. You next attempt on these standards will be on the final exam.")
     st.dataframe(
         eligibility_issues,
         use_container_width=True,
