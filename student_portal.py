@@ -181,47 +181,61 @@ st.dataframe(
 
 st.subheader("Semester Grade Determination")
 
-st.markdown("To earn a given letter grade, all rows of the table must meet the threshold for that letter grade.")
-
-display_level_fractions = level_fractions.rename(
-    columns={
-        "Fraction Met": "Percentage of Standards Met"
-    }
+st.markdown(
+    "Your current percentages are shown in the first row. "
+    "To earn a letter grade, your percentages must meet or exceed every required entry in that letter grade row."
 )
 
-st.dataframe(
-    style_grade_determination_dataframe(display_level_fractions),
-    use_container_width=True,
-    hide_index=True,
-)
-   
-st.markdown("### Letter Grade Thresholds")
+current_percentages = {
+    "Grade": "Your Current Percentage",
+    "1 or above": "—",
+    "2 or above": "—",
+    "3 or above": "—",
+    "4 or above": "—",
+}
 
-    
-threshold_rows = []
-    
+for _, row in level_fractions.iterrows():
+    level = row["Level"]
+    percentage = row["Percentage of Standards Met"]
+    current_percentages[level] = f"{int(round(100 * percentage))}%"
+
+threshold_rows = [current_percentages]
+
 for letter_grade, thresholds in GRADE_THRESHOLDS.items():
-    row = {"Grade": letter_grade}
+    row = {"Grade": f"{letter_grade} Threshold"}
 
     for level_number in [1, 2, 3, 4]:
+        column_name = f"{level_number} or above"
         fraction = thresholds.get(f"frac{level_number}", None)
 
         if fraction is None:
-            row[f"Level {level_number}"] = "—"
+            row[column_name] = "—"
         else:
-            row[f"Level {level_number}"] = (
-                f"{int(round(100 * fraction))}%"
-            )
+            row[column_name] = f"{int(round(100 * fraction))}%"
 
     threshold_rows.append(row)
 
 threshold_df = pd.DataFrame(threshold_rows)
 
-st.markdown("A student must complete the entire row of the following table to earn the corresponding letter grade.")
-st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
+def color_threshold_rows(row):
+    grade_label = row["Grade"]
+
+    if grade_label == "Your Current Percentage":
+        return ["font-weight: bold;"] * len(row)
+
+    if grade_label.startswith("A"):
+        return ["background-color: #00ff00;"] * len(row)
+    if grade_label.startswith("B"):
+        return ["background-color: #b7e1cd;"] * len(row)
+    if grade_label.startswith("C-"):
+        return ["background-color: #ff9900;"] * len(row)
+    if grade_label.startswith("C"):
+        return ["background-color: #ffff00;"] * len(row)
+
+    return [""] * len(row)
 
 st.dataframe(
-    threshold_df,
+    threshold_df.style.apply(color_threshold_rows, axis=1),
     use_container_width=True,
     hide_index=True,
 )
