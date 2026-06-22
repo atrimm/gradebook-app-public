@@ -235,14 +235,21 @@ st.markdown("To be eligible for a progress check, all corresponding classwork an
 st.markdown("If you are ineligible for a progress check on a given standard, then your next attempt at that standard will be on the final exam.")
 
 if eligibility_issues.empty:
-    st.info("You are eligible for all upcoming progress checks.")
+    st.success("You are eligible for all upcoming progress checks.")
 else:
-    st.info("You are ineligible to take a progress check on the following standards due to the reasons listed below. You next attempt on these standards will be on the final exam.")
-    st.dataframe(
-        eligibility_issues,
-        use_container_width=True,
-        hide_index=True,
+    st.info(
+        "You are ineligible to take a progress check on the following standards. "
+        "Your next attempt on these standards will be on the final exam."
     )
+
+    for row in eligibility_issues.itertuples(index=False):
+        standard = getattr(row, "standard", "")
+        reason = getattr(row, "eligibility_reason", "")
+
+        st.write(
+            f"You are ineligible for a progress check on standard **{standard}** "
+            f"because: {reason}"
+        )
 
 st.subheader("General Comments")
 
