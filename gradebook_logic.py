@@ -181,6 +181,10 @@ def append_evidence_row(
     standard,
     score,
     comment,
+    absent=False,
+    absence_reason="",
+    progress_check_eligible=True,
+    eligibility_reason="",
 ):
     new_row = {
         "student_id": student_id,
@@ -194,6 +198,10 @@ def append_evidence_row(
         "standard": standard,
         "score": score,
         "comment": comment,
+        "absent": absent,
+        "absence_reason": absence_reason,
+        "progress_check_eligible": progress_check_eligible,
+        "eligibility_reason": eligibility_reason,
     }
 
     return pd.concat(
