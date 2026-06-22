@@ -248,7 +248,7 @@ else:
 
         st.write(
             f"You are ineligible for a progress check on standard **{standard}** "
-            f"because you did not complete {reason}."
+            f"because you did not complete {reason} ."
         )
 
 st.subheader("General Comments")
