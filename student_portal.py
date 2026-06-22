@@ -159,6 +159,8 @@ else:
 
 st.subheader("Semester Grade Determination")
 
+st.markdown("To earn a given letter grade, all rows of the table must meet the threshold for that letter grade.")
+
 st.dataframe(
     style_grade_determination_dataframe(level_fractions),
     use_container_width=True,
