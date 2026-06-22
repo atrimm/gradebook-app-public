@@ -161,8 +161,14 @@ st.subheader("Semester Grade Determination")
 
 st.markdown("To earn a given letter grade, all rows of the table must meet the threshold for that letter grade.")
 
+display_level_fractions = level_fractions.rename(
+    columns={
+        "Fraction Met": "Percent of Standards Met"
+    }
+)
+
 st.dataframe(
-    style_grade_determination_dataframe(level_fractions),
+    style_grade_determination_dataframe(display_level_fractions),
     use_container_width=True,
     hide_index=True,
 )
