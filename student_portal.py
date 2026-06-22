@@ -267,10 +267,9 @@ student_report_html = make_student_html_report(
     progress_check_issues_df=eligibility_issues,
 )
 
-with st.expander("Student Report Export"):
-    st.download_button(
-        "Download Student Report",
-        data=student_report_html,
-        file_name=f"{student_id}_student_report.html",
-        mime="text/html",
-    )   
+st.download_button(
+    "Download Student Report",
+    data=student_report_html,
+    file_name=f"{student_id}_student_report.html",
+    mime="text/html",
+)   
