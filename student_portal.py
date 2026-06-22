@@ -60,11 +60,6 @@ if not test_email.endswith("@imsa.edu"):
     st.error("Please sign in with your IMSA Google account.")
     st.stop()
 
-st.sidebar.header("Signed in")
-st.sidebar.write(test_email)
-
-st.sidebar.divider()
-
 with st.sidebar.expander("How grades are determined", expanded=False):
 
     st.markdown("### Rubric")
@@ -114,6 +109,10 @@ with st.sidebar.expander("How grades are determined", expanded=False):
         hide_index=True,
     )
 
+st.sidebar.divider()
+
+st.sidebar.header("Signed in")
+st.sidebar.write(test_email)
 
 is_admin = test_email == "atrimm@imsa.edu"
 show_diagnostics = False
