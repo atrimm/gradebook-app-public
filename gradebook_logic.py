@@ -1005,6 +1005,8 @@ def read_csv_from_google_drive(file_name, folder_id):
         q=query,
         fields="files(id, name)",
         pageSize=10,
+        supportsAllDrives=True,
+        includeItemsFromAllDrives=True,
     ).execute()
 
     files = results.get("files", [])
