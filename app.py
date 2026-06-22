@@ -37,6 +37,7 @@ from gradebook_logic import (
     delete_assignment_from_gradebook,
     read_csv_from_google_drive,
     restore_google_drive_backup,
+    restore_latest_google_drive_backup,
 )
 
 if not st.user.get("is_logged_in", False):
@@ -1079,6 +1080,29 @@ elif view == "Backup Manager":
     backups = list_google_drive_backups()
 
     st.write(f"Found {len(backups)} backups.")
+
+    st.divider()
+
+    st.subheader("Undo Last Save")
+    
+    st.warning(
+        "This restores the most recent backup and replaces the current gradebook. "
+        "A backup of the current gradebook will be created first."
+    )
+    
+    confirm_undo = st.checkbox(
+        "I understand and want to undo the last save."
+    )
+    
+    if st.button("Undo Last Save"):
+        if confirm_undo:
+            restored_backup_name = restore_latest_google_drive_backup()
+            st.success(f"Restored latest backup: {restored_backup_name}")
+            st.rerun()
+        else:
+            st.error("Check the confirmation box before undoing the last save.")
+    
+    st.divider()
 
     if backups:
         backup_options = {
