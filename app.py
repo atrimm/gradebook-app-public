@@ -659,7 +659,7 @@ elif view == "Data Entry":
                 )
 
                 if not progress_check_eligible:
-                    eligibility_reason = st.text_input("Reason Not Eligible")
+                    eligibility_reason = st.text_input("Incomplete Assignment")
 
             if entry_type in ["assessment", "general_comment"]:
                 comment = st.text_area("Comment")
