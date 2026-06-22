@@ -167,9 +167,10 @@ else:
         hide_index=True,
     )
 
-    st.subheader("Grading Guide")
+    st.subheader("Grading Information")
 
     st.markdown("### Rubric")
+    st.markdown("Each standard is scored according to the following rubric.")
     
     rubric_rows = [
         {
@@ -189,6 +190,8 @@ else:
     )
     
     st.markdown("### Semester Grade Determination")
+    st.markdown("A student must complete the entire row to earn the corresponding letter grade.")
+    st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
     
     threshold_rows = []
     
