@@ -238,18 +238,24 @@ if eligibility_issues.empty:
     st.success("You are eligible for all upcoming progress checks.")
 else:
     st.info(
-        "You are ineligible to take a progress check on the following standards due to the reasons listed below. "
+        "You are currently ineligible for progress checks on the following standards. "
         "Your next attempt on these standards will be on the final exam."
     )
 
-    for row in eligibility_issues.itertuples(index=False):
-        standard = getattr(row, "standard", "")
-        reason = getattr(row, "eligibility_reason", "")
+    display_df = eligibility_issues[
+        ["standard", "assignment_name"]
+    ].copy()
 
-        st.write(
-            f"You are ineligible for a progress check on standard **{standard}** "
-            f"because you did not complete {reason}."
-        )
+    display_df.columns = [
+        "Standard",
+        "Incomplete Assignment",
+    ]
+
+    st.dataframe(
+        display_df,
+        use_container_width=True,
+        hide_index=True,
+    )
 
 st.subheader("General Comments")
 
