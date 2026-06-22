@@ -60,57 +60,6 @@ if not test_email.endswith("@imsa.edu"):
     st.error("Please sign in with your IMSA Google account.")
     st.stop()
 
-with st.sidebar.expander("How grades are determined", expanded=False):
-
-    st.markdown("### Rubric")
-    st.markdown("Each standard is scored according to the following rubric.")
-    
-    rubric_rows = [
-        {
-            "Score": score,
-            "Level": rubric_item["level"],
-            "Description": rubric_item["description"],
-        }
-        for score, rubric_item in GRADING_RUBRIC.items()
-    ]
-
-    rubric_df = pd.DataFrame(rubric_rows)
-
-    st.dataframe(
-        rubric_df,
-        use_container_width=True,
-        hide_index=True,
-    )
-
-    st.markdown("### Semester Grade Determination")
-    
-    threshold_rows = []
-
-    for letter_grade, thresholds in GRADE_THRESHOLDS.items():
-        row = {"Grade": letter_grade}
-
-        for level_number in [1, 2, 3, 4]:
-            fraction = thresholds.get(f"frac{level_number}", None)
-
-            if fraction is None:
-                row[f"Level {level_number}"] = "—"
-            else:
-                row[f"Level {level_number}"] = f"{int(round(100 * fraction))}%"
-
-        threshold_rows.append(row)
-
-    threshold_df = pd.DataFrame(threshold_rows)
-
-    st.markdown("A student must satisfy the full row in the table below to earn the corresponding letter grade.") 
-    st.markdown("Each entry shows the percentage of standards met at the given level.")
-    st.dataframe(
-        threshold_df,
-        use_container_width=True,
-        hide_index=True,
-    )
-
-st.sidebar.divider()
-
 st.sidebar.header("Signed in")
 st.sidebar.write(test_email)
 
@@ -214,6 +163,58 @@ else:
 
     st.dataframe(
         style_mastery_dataframe(display_scores),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.subheader("Grading Guide")
+
+    st.markdown("### Rubric")
+    
+    rubric_rows = [
+        {
+            "Score": score,
+            "Level": rubric_item["level"],
+            "Description": rubric_item["description"],
+        }
+        for score, rubric_item in GRADING_RUBRIC.items()
+    ]
+    
+    rubric_df = pd.DataFrame(rubric_rows)
+    
+    st.dataframe(
+        rubric_df,
+        use_container_width=True,
+        hide_index=True,
+    )
+    
+    st.markdown("### Semester Grade Determination")
+    
+    threshold_rows = []
+    
+    for letter_grade, thresholds in GRADE_THRESHOLDS.items():
+        row = {"Grade": letter_grade}
+    
+        for level_number in [1, 2, 3, 4]:
+            fraction = thresholds.get(f"frac{level_number}", None)
+    
+            if fraction is None:
+                row[f"Level {level_number}"] = "—"
+            else:
+                row[f"Level {level_number}"] = (
+                    f"{int(round(100 * fraction))}%"
+                )
+    
+        threshold_rows.append(row)
+    
+    threshold_df = pd.DataFrame(threshold_rows)
+    
+    st.markdown(
+        "A student must satisfy the full row to earn the corresponding letter grade."
+    )
+    
+    st.dataframe(
+        threshold_df,
         use_container_width=True,
         hide_index=True,
     )
