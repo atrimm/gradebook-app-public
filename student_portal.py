@@ -67,6 +67,27 @@ st.sidebar.divider()
 
 with st.sidebar.expander("How grades are determined", expanded=False):
 
+    st.markdown("### Rubric")
+
+    rubric_rows = [
+        {
+            "Score": score,
+            "Level": rubric_item["level"],
+            "Description": rubric_item["description"],
+        }
+        for score, rubric_item in GRADING_RUBRIC.items()
+    ]
+
+    rubric_df = pd.DataFrame(rubric_rows)
+
+    st.dataframe(
+        rubric_df,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.markdown("### Semester Grade Determination")
+    
     threshold_rows = []
 
     for letter_grade, thresholds in GRADE_THRESHOLDS.items():
@@ -91,24 +112,6 @@ with st.sidebar.expander("How grades are determined", expanded=False):
         hide_index=True,
     )
 
-    st.markdown("### Rubric")
-
-    rubric_rows = [
-        {
-            "Score": score,
-            "Level": rubric_item["level"],
-            "Description": rubric_item["description"],
-        }
-        for score, rubric_item in GRADING_RUBRIC.items()
-    ]
-
-    rubric_df = pd.DataFrame(rubric_rows)
-
-    st.dataframe(
-        rubric_df,
-        use_container_width=True,
-        hide_index=True,
-    )
 
 is_admin = test_email == "atrimm@imsa.edu"
 show_diagnostics = False
