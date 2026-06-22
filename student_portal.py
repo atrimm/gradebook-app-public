@@ -208,9 +208,9 @@ for letter_grade, thresholds in GRADE_THRESHOLDS.items():
         else:
             row[f"Level {level_number}"] = (f"{int(round(100 * fraction))}%")
     
-     threshold_rows.append(row)
+        threshold_rows.append(row)
     
-threshold_df = pd.DataFrame(threshold_rows)
+        threshold_df = pd.DataFrame(threshold_rows)
     
 st.markdown("A student must satisfy the full row to earn the corresponding letter grade.")
     
