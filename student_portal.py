@@ -106,7 +106,7 @@ with st.sidebar.expander("How grades are determined", expanded=False):
 
     threshold_df = pd.DataFrame(threshold_rows)
 
-    st.markdown("A student must satisfy the full row to earn the corresponding letter grade.") 
+    st.markdown("A student must satisfy the full row in the table below to earn the corresponding letter grade.") 
     st.markdown("Each entry shows the percentage of standards met at the given level.")
     st.dataframe(
         threshold_df,
