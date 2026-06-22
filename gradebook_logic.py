@@ -881,7 +881,7 @@ def make_student_html_report(
         ("Score History", score_history_df),
         ("General Comments", general_comments_df),
         ("Assessment Absences", assessment_absences_df),
-        ("Progress Check Eligibility Issues", progress_check_issues_df),
+        ("Progress Check Eligibility", progress_check_issues_df),
     ]
 
     for title, df in sections:
