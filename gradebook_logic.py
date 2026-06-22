@@ -383,29 +383,6 @@ def color_letter_grade(val):
 
     return ""
 
-def style_grade_determination_dataframe(df):
-    styled_df = df.style
-
-    percent_column = None
-
-    if "Fraction Met" in df.columns:
-        percent_column = "Fraction Met"
-    elif "Percentage of Standards Met" in df.columns:
-        percent_column = "Percentage of Standards Met"
-
-    if percent_column:
-        styled_df = styled_df.format(
-            {percent_column: "{:.0%}"}
-        )
-
-    if "Threshold Met" in df.columns:
-        styled_df = styled_df.map(
-            color_letter_grade,
-            subset=["Threshold Met"],
-        )
-
-    return styled_df
-
 def make_grading_rubric_dataframe(grading_rubric):
     rubric_rows = [
         {
