@@ -406,6 +406,119 @@ def style_grade_determination_dataframe(df):
 
     return styled_df
 
+def make_grading_rubric_dataframe(grading_rubric):
+    rubric_rows = [
+        {
+            "Score": score,
+            "Level": rubric_item["level"],
+            "Description": rubric_item["description"],
+        }
+        for score, rubric_item in grading_rubric.items()
+    ]
+
+    return pd.DataFrame(rubric_rows)
+
+
+def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
+    current_percentages = {
+        "Grade": "Your Current Percentage",
+        "1 or above": "—",
+        "2 or above": "—",
+        "3 or above": "—",
+        "4 or above": "—",
+    }
+
+    for _, row in level_fractions.iterrows():
+        level = row["Level"]
+        percentage = row["Fraction Met"]
+        current_percentages[level] = f"{int(round(100 * percentage))}%"
+
+    threshold_rows = [current_percentages]
+
+    for letter_grade, thresholds in grade_thresholds.items():
+        row = {"Grade": f"{letter_grade} Threshold"}
+
+        for level_number in [1, 2, 3, 4]:
+            column_name = f"{level_number} or above"
+            fraction = thresholds.get(f"frac{level_number}", None)
+
+            if fraction is None:
+                row[column_name] = "—"
+            else:
+                row[column_name] = f"{int(round(100 * fraction))}%"
+
+        threshold_rows.append(row)
+
+    return pd.DataFrame(threshold_rows)
+
+
+def style_semester_grade_threshold_dataframe(df, grade_thresholds):
+    def color_threshold_rows(row):
+        styles = [""] * len(row)
+
+        if row["Grade"] == "Your Current Percentage":
+            styles[0] = "font-weight: bold;"
+
+            for column_index, column_name in enumerate(row.index):
+                if column_name == "Grade":
+                    continue
+
+                current_value = row[column_name]
+
+                if current_value == "—":
+                    continue
+
+                current_fraction = int(current_value.replace("%", "")) / 100
+                highest_grade_met = None
+
+                for letter_grade, thresholds in grade_thresholds.items():
+                    level_number = column_name.split()[0]
+                    required_fraction = thresholds.get(
+                        f"frac{level_number}",
+                        None,
+                    )
+
+                    if (
+                        required_fraction is not None
+                        and current_fraction >= required_fraction
+                    ):
+                        highest_grade_met = letter_grade
+                        break
+
+                if highest_grade_met == "A":
+                    styles[column_index] = (
+                        "background-color: #00ff00; font-weight: bold;"
+                    )
+                elif highest_grade_met == "B":
+                    styles[column_index] = (
+                        "background-color: #b7e1cd; font-weight: bold;"
+                    )
+                elif highest_grade_met == "C":
+                    styles[column_index] = (
+                        "background-color: #ffff00; font-weight: bold;"
+                    )
+                elif highest_grade_met == "C-":
+                    styles[column_index] = (
+                        "background-color: #ff9900; font-weight: bold;"
+                    )
+                else:
+                    styles[column_index] = "font-weight: bold;"
+
+            return styles
+
+        if row["Grade"].startswith("A"):
+            return ["background-color: #00ff00;"] * len(row)
+        if row["Grade"].startswith("B"):
+            return ["background-color: #b7e1cd;"] * len(row)
+        if row["Grade"].startswith("C-"):
+            return ["background-color: #ff9900;"] * len(row)
+        if row["Grade"].startswith("C"):
+            return ["background-color: #ffff00;"] * len(row)
+
+        return styles
+
+    return df.style.apply(color_threshold_rows, axis=1)
+
 def backup_gradebook(csv_path, max_backups=50):
     backup_dir = csv_path.parent / "backups"
     backup_dir.mkdir(exist_ok=True)

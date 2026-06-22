@@ -10,6 +10,9 @@ from gradebook_logic import (
     get_student_dashboard_data,
     style_grade_determination_dataframe,
     style_mastery_dataframe,
+    make_grading_rubric_dataframe,
+    make_semester_grade_threshold_dataframe,
+    style_semester_grade_threshold_dataframe,
 )
 
 from gradebook_logic import read_csv_from_google_drive
@@ -161,20 +164,32 @@ else:
 
 st.markdown("### Rubric")
 st.markdown("Each standard is scored according to the following rubric.")
-    
-rubric_rows = [
-    {
-         "Score": score,
-         "Level": rubric_item["level"],
-         "Description": rubric_item["description"],
-    }
-    for score, rubric_item in GRADING_RUBRIC.items()
-]
-    
-rubric_df = pd.DataFrame(rubric_rows)
-    
+
+rubric_df = make_grading_rubric_dataframe(GRADING_RUBRIC)
+
 st.dataframe(
     rubric_df,
+    use_container_width=True,
+    hide_index=True,
+)
+
+st.subheader("Semester Grade Determination")
+
+st.markdown(
+    "Your current percentages are shown in the first row. "
+    "To earn a letter grade, your percentages must meet or exceed every required entry in that letter grade row."
+)
+
+threshold_df = make_semester_grade_threshold_dataframe(
+    level_fractions,
+    GRADE_THRESHOLDS,
+)
+
+st.dataframe(
+    style_semester_grade_threshold_dataframe(
+        threshold_df,
+        GRADE_THRESHOLDS,
+    ),
     use_container_width=True,
     hide_index=True,
 )
