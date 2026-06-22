@@ -1121,3 +1121,29 @@ def backup_gradebook_to_google_drive():
     )
 
     return backup_file_name
+
+def list_google_drive_backups():
+    import streamlit as st
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/drive.readonly"],
+    )
+
+    service = build("drive", "v3", credentials=credentials)
+
+    results = service.files().list(
+        q=(
+            f"'{st.secrets['BACKUPS_FOLDER_ID']}' in parents "
+            f"and trashed = false"
+        ),
+        fields="files(id,name,createdTime)",
+        orderBy="createdTime desc",
+        pageSize=100,
+        supportsAllDrives=True,
+        includeItemsFromAllDrives=True,
+    ).execute()
+
+    return results.get("files", [])
