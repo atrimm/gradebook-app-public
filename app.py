@@ -38,6 +38,7 @@ from gradebook_logic import (
     read_csv_from_google_drive,
     restore_google_drive_backup,
     restore_latest_google_drive_backup,
+    compare_current_gradebook_to_google_drive_backup,
 )
 
 if not st.user.get("is_logged_in", False):
@@ -1114,7 +1115,22 @@ elif view == "Backup Manager":
             "Backup to restore",
             list(backup_options.keys()),
         )
-    
+
+        if st.button("Compare Current Gradebook to Selected Backup"):
+            rows_only_in_current, rows_only_in_backup = (
+                compare_current_gradebook_to_google_drive_backup(
+                    backup_options[selected_backup_label]
+                )
+            )
+
+            st.subheader("Rows in Current Gradebook but Not in Backup")
+            st.write(f"{len(rows_only_in_current)} rows")
+            st.dataframe(rows_only_in_current, use_container_width=True)
+        
+            st.subheader("Rows in Backup but Not in Current Gradebook")
+            st.write(f"{len(rows_only_in_backup)} rows")
+            st.dataframe(rows_only_in_backup, use_container_width=True)
+        
         st.warning(
             "Restoring a backup will replace the current gradebook. "
             "A backup of the current gradebook will be created first."
