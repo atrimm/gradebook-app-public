@@ -268,7 +268,7 @@ student_report_html = make_student_html_report(
 )
 
 st.download_button(
-    "Download Student Report",
+    "Download Grade Report",
     data=student_report_html,
     file_name=f"{student_id}_student_report.html",
     mime="text/html",
