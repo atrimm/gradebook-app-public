@@ -453,7 +453,7 @@ def make_semester_grade_threshold_dataframe(level_fractions, grade_thresholds):
 
 
 def style_semester_grade_threshold_dataframe(df, grade_thresholds):
-    current_row_divider = "background-color: red;"
+    current_row_divider = "border-bottom: 6px solid #222;"
 
     def add_current_row_divider(style_string):
         if style_string:
