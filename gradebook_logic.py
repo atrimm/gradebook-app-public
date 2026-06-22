@@ -386,9 +386,16 @@ def color_letter_grade(val):
 def style_grade_determination_dataframe(df):
     styled_df = df.style
 
+    percent_column = None
+
     if "Fraction Met" in df.columns:
+        percent_column = "Fraction Met"
+    elif "Percent of Standards Met" in df.columns:
+        percent_column = "Percent of Standards Met"
+
+    if percent_column:
         styled_df = styled_df.format(
-            {"Fraction Met": "{:.0%}"}
+            {percent_column: "{:.0%}"}
         )
 
     if "Threshold Met" in df.columns:
