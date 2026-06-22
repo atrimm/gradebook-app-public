@@ -214,7 +214,7 @@ for letter_grade, thresholds in GRADE_THRESHOLDS.items():
 
 threshold_df = pd.DataFrame(threshold_rows)
     
-st.markdown("A student must satisfy the full row to earn the corresponding letter grade.")
+st.markdown("A student must complete the full row of the following table to earn the corresponding letter grade.")
     
 st.dataframe(
     threshold_df,
