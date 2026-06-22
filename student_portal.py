@@ -196,7 +196,7 @@ current_percentages = {
 
 for _, row in level_fractions.iterrows():
     level = row["Level"]
-    percentage = row["Percentage of Standards Met"]
+    percentage = row["Fraction Met"]
     current_percentages[level] = f"{int(round(100 * percentage))}%"
 
 threshold_rows = [current_percentages]
