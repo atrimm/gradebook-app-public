@@ -167,60 +167,60 @@ st.dataframe(
     hide_index=True,
 )
 
-    st.subheader("Grading Information")
 
-    st.markdown("### Rubric")
-    st.markdown("Each standard is scored according to the following rubric.")
+
+st.subheader("Grading Information")
+
+st.markdown("### Rubric")
+st.markdown("Each standard is scored according to the following rubric.")
     
-    rubric_rows = [
-        {
-            "Score": score,
-            "Level": rubric_item["level"],
-            "Description": rubric_item["description"],
-        }
-        for score, rubric_item in GRADING_RUBRIC.items()
-    ]
+rubric_rows = [
+    {
+         "Score": score,
+         "Level": rubric_item["level"],
+         "Description": rubric_item["description"],
+    }
+    for score, rubric_item in GRADING_RUBRIC.items()
+]
     
-    rubric_df = pd.DataFrame(rubric_rows)
+rubric_df = pd.DataFrame(rubric_rows)
     
-    st.dataframe(
-        rubric_df,
-        use_container_width=True,
-        hide_index=True,
-    )
+st.dataframe(
+    rubric_df,
+    use_container_width=True,
+    hide_index=True,
+)
     
-    st.markdown("### Semester Grade Determination")
-    st.markdown("A student must complete the entire row to earn the corresponding letter grade.")
-    st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
+st.markdown("### Semester Grade Determination")
+st.markdown("A student must complete the entire row to earn the corresponding letter grade.")
+st.markdown("Each entry shows the percentage of standards which must be met at the corresponding level.")
     
-    threshold_rows = []
+threshold_rows = []
     
-    for letter_grade, thresholds in GRADE_THRESHOLDS.items():
-        row = {"Grade": letter_grade}
+for letter_grade, thresholds in GRADE_THRESHOLDS.items():
+    row = {"Grade": letter_grade}
     
-        for level_number in [1, 2, 3, 4]:
-            fraction = thresholds.get(f"frac{level_number}", None)
+    for level_number in [1, 2, 3, 4]:
+          fraction = thresholds.get(f"frac{level_number}", None)
     
-            if fraction is None:
-                row[f"Level {level_number}"] = "—"
-            else:
-                row[f"Level {level_number}"] = (
-                    f"{int(round(100 * fraction))}%"
-                )
+         if fraction is None:
+              row[f"Level {level_number}"] = "—"
+          else:
+             row[f"Level {level_number}"] = (
+                   f"{int(round(100 * fraction))}%"
+             )
     
-        threshold_rows.append(row)
+     threshold_rows.append(row)
     
-    threshold_df = pd.DataFrame(threshold_rows)
+threshold_df = pd.DataFrame(threshold_rows)
     
-    st.markdown(
-        "A student must satisfy the full row to earn the corresponding letter grade."
-    )
+st.markdown("A student must satisfy the full row to earn the corresponding letter grade.")
     
-    st.dataframe(
-        threshold_df,
-        use_container_width=True,
-        hide_index=True,
-    )
+st.dataframe(
+    threshold_df,
+    use_container_width=True,
+    hide_index=True,
+)
 
 st.subheader("Score History")
 
