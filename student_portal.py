@@ -143,14 +143,6 @@ general_comments = dashboard_data["general_comments"]
 
 st.metric("Semester Grade", semester_grade)
 
-st.subheader("Grade Determination")
-
-st.dataframe(
-    style_grade_determination_dataframe(level_fractions),
-    use_container_width=True,
-    hide_index=True,
-)
-
 st.subheader("Current Scores")
 
 if student_current_scores.empty:
@@ -166,6 +158,14 @@ else:
         use_container_width=True,
         hide_index=True,
     )
+
+st.subheader("Grade Determination")
+
+st.dataframe(
+    style_grade_determination_dataframe(level_fractions),
+    use_container_width=True,
+    hide_index=True,
+)
 
     st.subheader("Grading Information")
 
