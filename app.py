@@ -1082,37 +1082,17 @@ elif view == "Backup Manager":
 
     st.write(f"Found {len(backups)} backups.")
 
-    st.divider()
-
-    st.subheader("Undo Last Save")
-    
-    st.warning(
-        "This restores the most recent backup and replaces the current gradebook. "
-        "A backup of the current gradebook will be created first."
-    )
-    
-    confirm_undo = st.checkbox(
-        "I understand and want to undo the last save."
-    )
-    
-    if st.button("Undo Last Save"):
-        if confirm_undo:
-            restored_backup_name = restore_latest_google_drive_backup()
-            st.success(f"Restored latest backup: {restored_backup_name}")
-            st.rerun()
-        else:
-            st.error("Check the confirmation box before undoing the last save.")
-    
-    st.divider()
-
     if backups:
+
         backup_options = {
             f"{backup['name']} — {backup['createdTime']}": backup["id"]
             for backup in backups
         }
-    
+
+        st.subheader("Backup Selection")
+
         selected_backup_label = st.selectbox(
-            "Backup to restore",
+            "Backup",
             list(backup_options.keys()),
         )
 
@@ -1125,29 +1105,63 @@ elif view == "Backup Manager":
 
             st.subheader("Rows in Current Gradebook but Not in Backup")
             st.write(f"{len(rows_only_in_current)} rows")
-            st.dataframe(rows_only_in_current, use_container_width=True)
-        
+            st.dataframe(
+                rows_only_in_current,
+                use_container_width=True,
+            )
+
             st.subheader("Rows in Backup but Not in Current Gradebook")
             st.write(f"{len(rows_only_in_backup)} rows")
-            st.dataframe(rows_only_in_backup, use_container_width=True)
-        
+            st.dataframe(
+                rows_only_in_backup,
+                use_container_width=True,
+            )
+
         st.warning(
-            "Restoring a backup will replace the current gradebook. "
+            "Restoring a selected backup will replace the current gradebook. "
             "A backup of the current gradebook will be created first."
         )
-    
+
         confirm_restore = st.checkbox(
-            "I understand and want to restore this backup."
+            "I understand and want to restore the selected backup."
         )
-    
+
         if st.button("Restore Selected Backup"):
             if confirm_restore:
                 restore_google_drive_backup(
                     backup_options[selected_backup_label]
                 )
-                st.success("Backup restored. Reload the app to view restored data.")
+                st.success("Backup restored.")
                 st.rerun()
             else:
-                st.error("Check the confirmation box before restoring.")
+                st.error(
+                    "Check the confirmation box before restoring."
+                )
+
+        st.divider()
+
     else:
         st.info("No backups found.")
+
+    st.subheader("Undo Last Save")
+
+    st.warning(
+        "This restores the most recent backup and replaces the current gradebook. "
+        "A backup of the current gradebook will be created first."
+    )
+
+    confirm_undo = st.checkbox(
+        "I understand and want to undo the last save."
+    )
+
+    if st.button("Undo Last Save"):
+        if confirm_undo:
+            restored_backup_name = restore_latest_google_drive_backup()
+            st.success(
+                f"Restored latest backup: {restored_backup_name}"
+            )
+            st.rerun()
+        else:
+            st.error(
+                "Check the confirmation box before undoing the last save."
+            )
