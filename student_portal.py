@@ -25,7 +25,10 @@ st.set_page_config(
 
 if not st.user.get("is_logged_in", False):
     st.title("Student Grade Portal")
-    st.write("Please sign in with your IMSA Google account.")
+    st.write(
+    "Students: Please sign in with your IMSA Google account. "
+    "Parents: Please sign in with the Google account linked to your email address on file."
+)
     
     if st.button("Sign in with Google"):
         st.login("google")
@@ -54,11 +57,18 @@ def load_student_lookup():
 gradebook = load_gradebook()
 student_lookup = load_student_lookup()
 
-test_email = st.user["email"].strip().lower()
 
-if not test_email.endswith("@imsa.edu"):
-    st.error("Please sign in with your IMSA Google account.")
-    st.stop()
+@st.cache_data(ttl=300)
+def load_parent_lookup():
+    return read_csv_from_google_drive(
+        "parent_lookup.csv",
+        st.secrets["DRIVE_FOLDER_ID"],
+    )
+
+
+parent_lookup = load_parent_lookup()
+
+test_email = st.user["email"].strip().lower()
 
 st.sidebar.header("Signed in")
 st.sidebar.write(test_email)
@@ -72,23 +82,6 @@ if is_admin:
 if st.sidebar.button("Sign out"):
     st.logout()
 
-if is_admin and show_diagnostics:
-
-    st.title("Admin Diagnostics")
-
-    st.write(f"Signed in as: {test_email}")
-
-    st.metric("Gradebook rows", len(gradebook))
-    st.metric("Student lookup rows", len(student_lookup))
-
-    st.subheader("Students in lookup file")
-    st.dataframe(student_lookup)
-
-    st.subheader("Gradebook preview")
-    st.dataframe(gradebook.tail(20))
-
-    st.stop()
-
 student_lookup["email_normalized"] = (
     student_lookup["email"]
     .astype(str)
@@ -96,18 +89,56 @@ student_lookup["email_normalized"] = (
     .str.lower()
 )
 
-matching_rows = student_lookup[
+parent_lookup["email_normalized"] = (
+    parent_lookup["parent_email"]
+    .astype(str)
+    .str.strip()
+    .str.lower()
+)
+
+student_matches = student_lookup[
     student_lookup["email_normalized"] == test_email
 ]
 
-if matching_rows.empty:
+parent_matches = parent_lookup[
+    parent_lookup["email_normalized"] == test_email
+]
+
+if student_matches.empty and parent_matches.empty:
     st.error(
         "Your Google account is not currently linked to a student record. "
         "Please contact your instructor."
     )
     st.stop()
 
-student_id = matching_rows.iloc[0]["student_id"]
+if not student_matches.empty:
+    student_id = student_matches.iloc[0]["student_id"]
+    viewer_role = "student"
+else:
+    student_id = parent_matches.iloc[0]["student_id"]
+    viewer_role = "parent"
+
+if is_admin and show_diagnostics:
+
+    st.title("Admin Diagnostics")
+
+    st.write(f"Signed in as: {test_email}")
+    st.write(f"Viewer role: {viewer_role}")
+
+    st.metric("Gradebook rows", len(gradebook))
+    st.metric("Student lookup rows", len(student_lookup))
+    st.metric("Parent lookup rows", len(parent_lookup))
+
+    st.subheader("Students in lookup file")
+    st.dataframe(student_lookup)
+
+    st.subheader("Parents in lookup file")
+    st.dataframe(parent_lookup)
+
+    st.subheader("Gradebook preview")
+    st.dataframe(gradebook.tail(20))
+
+    st.stop()
 
 student_rows = gradebook[gradebook["student_id"] == student_id].copy()
 
