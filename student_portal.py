@@ -180,9 +180,9 @@ st.subheader("Semester Grade")
 st.markdown(f"# {semester_grade}")
 
 st.markdown(
-    "This is the current semester grade based on standards assessed so far. "
-    "In particular all standards are assessed multiple times throughout the semester. "
-    "Future assessments, reassessments, and the final exam may change this grade."
+    "This is the current semester grade, based on standards assessed so far. "
+    "Note that the current semester grade is *not* an average. Instead, it is determined by the "Semester Grade Determination" table below."
+    "In particular, no matter the current semester grade, it is possible to achieve an 'A' up until the end of the semester by eventually meeting the course standards at the levels described below." 
 )
 
 
@@ -201,6 +201,7 @@ else:
         use_container_width=True,
         hide_index=True,
     )
+st.markdown("This table shows the highest observed performance on each standard. Every course standard will be assessed multiple times throughout the semester, with the highest score counting toward the semester grade.")
 
 st.markdown("### Rubric")
 st.markdown("Each standard is scored according to the following rubric.")
