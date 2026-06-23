@@ -144,6 +144,11 @@ general_comments = dashboard_data["general_comments"]
 st.subheader("Semester Grade")
 st.markdown(f"# {semester_grade}")
 
+st.caption(
+    "This is the current semester grade based on standards assessed so far. "
+    "Future assessments, reassessments, and the final exam may change this grade."
+)
+
 
 st.subheader("Current Scores")
 
