@@ -218,10 +218,10 @@ st.subheader("Course Standards")
 standards_df = pd.DataFrame(
     [
         {
-            "Standard": code,
+            "Standard": standard,
             "Description": description,
         }
-        for code, description in COURSE_STANDARDS.items()
+        for standard, description in COURSE_STANDARDS.items()
     ]
 )
 
