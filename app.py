@@ -922,95 +922,95 @@ elif view == "Data Entry":
                     )
 
         with roster_tab:
-        st.subheader("Roster Info")
-
-        if students.empty:
-            st.info("No active students in this mod.")
-        else:
-            roster_info_table = students.copy()
-
-            for col in ["phone_slot", "pronunciation"]:
-                if col in active_mod_gradebook.columns:
-                    latest_values = (
-                        active_mod_gradebook[
-                            ["student_id", "date", col]
-                        ]
-                        .dropna(subset=[col])
-                        .sort_values("date")
-                        .drop_duplicates(subset=["student_id"], keep="last")
-                        [["student_id", col]]
-                    )
-
-                    roster_info_table = roster_info_table.merge(
-                        latest_values,
-                        on="student_id",
-                        how="left",
-                    )
-                else:
-                    roster_info_table[col] = ""
-
-            roster_info_table["phone_slot"] = roster_info_table["phone_slot"].fillna("")
-            roster_info_table["pronunciation"] = roster_info_table["pronunciation"].fillna("")
-
-            roster_info_table = roster_info_table[
-                [
-                    "student_id",
-                    "last_name",
-                    "first_name",
-                    "phone_slot",
-                    "pronunciation",
+            st.subheader("Roster Info")
+    
+            if students.empty:
+                st.info("No active students in this mod.")
+            else:
+                roster_info_table = students.copy()
+    
+                for col in ["phone_slot", "pronunciation"]:
+                    if col in active_mod_gradebook.columns:
+                        latest_values = (
+                            active_mod_gradebook[
+                                ["student_id", "date", col]
+                            ]
+                            .dropna(subset=[col])
+                            .sort_values("date")
+                            .drop_duplicates(subset=["student_id"], keep="last")
+                            [["student_id", col]]
+                        )
+    
+                        roster_info_table = roster_info_table.merge(
+                            latest_values,
+                            on="student_id",
+                            how="left",
+                        )
+                    else:
+                        roster_info_table[col] = ""
+    
+                roster_info_table["phone_slot"] = roster_info_table["phone_slot"].fillna("")
+                roster_info_table["pronunciation"] = roster_info_table["pronunciation"].fillna("")
+    
+                roster_info_table = roster_info_table[
+                    [
+                        "student_id",
+                        "last_name",
+                        "first_name",
+                        "phone_slot",
+                        "pronunciation",
+                    ]
                 ]
-            ]
-
-            edited_roster_info = st.data_editor(
-                roster_info_table,
-                column_config={
-                    "student_id": st.column_config.TextColumn("Student ID", disabled=True),
-                    "last_name": st.column_config.TextColumn("Last Name", disabled=True),
-                    "first_name": st.column_config.TextColumn("First Name", disabled=True),
-                    "phone_slot": st.column_config.TextColumn("Phone Slot"),
-                    "pronunciation": st.column_config.TextColumn("Pronunciation"),
-                },
-                hide_index=True,
-                use_container_width=True,
-            )
-
-            if st.button("Save Roster Info"):
-                new_rows = []
-
-                for row in edited_roster_info.itertuples(index=False):
-                    new_rows.append(
-                        {
-                            "student_id": row.student_id,
-                            "first_name": row.first_name,
-                            "last_name": row.last_name,
-                            "mod": selected_mod,
-                            "date": pd.Timestamp.today().date(),
-                            "entry_type": "roster_info",
-                            "assignment_name": "",
-                            "assignment_type": "",
-                            "standard": "",
-                            "score": 0,
-                            "comment": "",
-                            "absent": False,
-                            "absence_reason": "",
-                            "progress_check_eligible": True,
-                            "eligibility_reason": "",
-                            "phone_slot": row.phone_slot,
-                            "pronunciation": row.pronunciation,
-                        }
-                    )
-
-                updated_gradebook = append_evidence_rows(
-                    gradebook,
-                    new_rows,
+    
+                edited_roster_info = st.data_editor(
+                    roster_info_table,
+                    column_config={
+                        "student_id": st.column_config.TextColumn("Student ID", disabled=True),
+                        "last_name": st.column_config.TextColumn("Last Name", disabled=True),
+                        "first_name": st.column_config.TextColumn("First Name", disabled=True),
+                        "phone_slot": st.column_config.TextColumn("Phone Slot"),
+                        "pronunciation": st.column_config.TextColumn("Pronunciation"),
+                    },
+                    hide_index=True,
+                    use_container_width=True,
                 )
-
-                backup_gradebook_to_google_drive()
-
-                save_gradebook_to_google_drive(updated_gradebook)
-
-                st.success(f"Saved roster info for {len(new_rows)} students.")
+    
+                if st.button("Save Roster Info"):
+                    new_rows = []
+    
+                    for row in edited_roster_info.itertuples(index=False):
+                        new_rows.append(
+                            {
+                                "student_id": row.student_id,
+                                "first_name": row.first_name,
+                                "last_name": row.last_name,
+                                "mod": selected_mod,
+                                "date": pd.Timestamp.today().date(),
+                                "entry_type": "roster_info",
+                                "assignment_name": "",
+                                "assignment_type": "",
+                                "standard": "",
+                                "score": 0,
+                                "comment": "",
+                                "absent": False,
+                                "absence_reason": "",
+                                "progress_check_eligible": True,
+                                "eligibility_reason": "",
+                                "phone_slot": row.phone_slot,
+                                "pronunciation": row.pronunciation,
+                            }
+                        )
+    
+                    updated_gradebook = append_evidence_rows(
+                        gradebook,
+                        new_rows,
+                    )
+    
+                    backup_gradebook_to_google_drive()
+    
+                    save_gradebook_to_google_drive(updated_gradebook)
+    
+                    st.success(f"Saved roster info for {len(new_rows)} students.")
 
 elif view == "Row Editor":
     #st.header("Row Editor")
