@@ -177,7 +177,7 @@ absence_history = dashboard_data["absence_history"]
 general_comments = dashboard_data["general_comments"]
 
 st.info(
-    "PowerSchool remains the official grade record. "
+    "PowerSchool is the official grade record, but is not very supportive of standards-based grading. "
     "This portal provides more detailed information about progress towards meeting the course standards, "
     "score history, comments, progress check eligibility, and your current semester grade."
 )
