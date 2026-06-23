@@ -185,7 +185,7 @@ st.markdown("In particular, no matter the current semester grade, it is possible
 
 
 st.subheader("Current Scores")
-
+st.markdown("This table shows the highest observed performance on each standard. Every course standard will be assessed multiple times throughout the semester, with the highest score counting toward the semester grade.")
 if student_current_scores.empty:
     st.info("No current scores found.")
 else:
@@ -199,7 +199,6 @@ else:
         use_container_width=True,
         hide_index=True,
     )
-st.markdown("This table shows the highest observed performance on each standard. Every course standard will be assessed multiple times throughout the semester, with the highest score counting toward the semester grade.")
 
 st.markdown("### Rubric")
 st.markdown("Each standard is scored according to the following rubric.")
