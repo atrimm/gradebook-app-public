@@ -180,10 +180,9 @@ st.subheader("Semester Grade")
 st.markdown(f"# {semester_grade}")
 
 st.markdown(
-    "This is the current semester grade, based on standards assessed so far. ",
-    "Note that the current semester grade is *not* an average. Instead, it is determined by the "Semester Grade Determination" table below.",
-    "In particular, no matter the current semester grade, it is possible to achieve an 'A' up until the end of the semester by eventually meeting the course standards at the levels described below." 
-)
+    "This is the current semester grade, based on standards assessed so far. ")
+    st.markdown("Note that the current semester grade is *not* an average. Instead, it is determined by the "Semester Grade Determination" table below.")
+    st.markdown(("In particular, no matter the current semester grade, it is possible to achieve an 'A' up until the end of the semester by eventually meeting the course standards at the levels described below.")
 
 
 st.subheader("Current Scores")
