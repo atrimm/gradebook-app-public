@@ -175,9 +175,16 @@ if view == "Gradebook":
         else:
             gradebook_view[extra_column] = ""
 
-    gradebook_view["phone_slot"] = pd.to_numeric(
-        gradebook_view["phone_slot"],
-        errors="coerce",
+    gradebook_view["phone_slot"] = (
+        pd.to_numeric(
+            gradebook_view["phone_slot"],
+            errors="coerce",
+        )
+        .apply(
+            lambda x: int(x)
+            if pd.notna(x)
+            else ""
+        )
     )
 
     gradebook_view["pronunciation"] = (
