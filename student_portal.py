@@ -180,6 +180,7 @@ st.markdown(f"# {semester_grade}")
 
 st.markdown(
     "This is the current semester grade based on standards assessed so far. "
+    "In particular all standards are assessed multiple times throughout the semester. "
     "Future assessments, reassessments, and the final exam may change this grade."
 )
 
