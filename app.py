@@ -150,6 +150,11 @@ if view == "Gradebook":
         how="left"
     )
 
+    gradebook_view = gradebook_view.sort_values(
+        by=["last_name", "first_name"],
+        ascending=[True, True],
+    )
+
     st.dataframe(
         style_mastery_dataframe(gradebook_view),
         use_container_width=True,
