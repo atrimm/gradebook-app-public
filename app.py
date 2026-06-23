@@ -155,6 +155,16 @@ if view == "Gradebook":
         ascending=[True, True],
     )
 
+    desired_order = ["last_name", "first_name", "student_id"]
+    remaining_columns = [
+        col for col in gradebook_view.columns
+        if col not in desired_order
+    ]
+
+    gradebook_view = gradebook_view[
+        desired_order + remaining_columns
+    ]
+
     st.dataframe(
         style_mastery_dataframe(gradebook_view),
         use_container_width=True,
