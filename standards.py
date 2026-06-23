@@ -3,4 +3,5 @@ COURSE_STANDARDS = {
     "C.2": "Derivatives and rates of change",
     "D.1": "Derivative rules",
     "D.2": "Applications of derivatives",
+    "E.1": "Fake"
 }
