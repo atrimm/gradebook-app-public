@@ -923,12 +923,12 @@ elif view == "Data Entry":
 
         with roster_tab:
             st.subheader("Roster Info")
-    
+
             if students.empty:
                 st.info("No active students in this mod.")
             else:
                 roster_info_table = students.copy()
-    
+
                 for col in ["phone_slot", "pronunciation"]:
                     if col in active_mod_gradebook.columns:
                         latest_values = (
@@ -940,7 +940,7 @@ elif view == "Data Entry":
                             .drop_duplicates(subset=["student_id"], keep="last")
                             [["student_id", col]]
                         )
-    
+
                         roster_info_table = roster_info_table.merge(
                             latest_values,
                             on="student_id",
@@ -948,10 +948,15 @@ elif view == "Data Entry":
                         )
                     else:
                         roster_info_table[col] = ""
-    
+
                 roster_info_table["phone_slot"] = roster_info_table["phone_slot"].fillna("")
                 roster_info_table["pronunciation"] = roster_info_table["pronunciation"].fillna("")
-    
+
+                roster_info_table = roster_info_table.sort_values(
+                    by=["last_name", "first_name"],
+                    ascending=[True, True],
+                )
+
                 roster_info_table = roster_info_table[
                     [
                         "phone_slot",
@@ -961,23 +966,23 @@ elif view == "Data Entry":
                         "student_id",
                     ]
                 ]
-    
+
                 edited_roster_info = st.data_editor(
                     roster_info_table,
                     column_config={
-                        "student_id": st.column_config.TextColumn("Student ID", disabled=True),
+                        "phone_slot": st.column_config.TextColumn("Phone Slot"),
                         "last_name": st.column_config.TextColumn("Last Name", disabled=True),
                         "first_name": st.column_config.TextColumn("First Name", disabled=True),
-                        "phone_slot": st.column_config.TextColumn("Phone Slot"),
                         "pronunciation": st.column_config.TextColumn("Pronunciation"),
+                        "student_id": st.column_config.TextColumn("Student ID", disabled=True),
                     },
                     hide_index=True,
                     use_container_width=True,
                 )
-    
+
                 if st.button("Save Roster Info"):
                     new_rows = []
-    
+
                     for row in edited_roster_info.itertuples(index=False):
                         new_rows.append(
                             {
@@ -1000,18 +1005,17 @@ elif view == "Data Entry":
                                 "pronunciation": row.pronunciation,
                             }
                         )
-    
+
                     updated_gradebook = append_evidence_rows(
                         gradebook,
                         new_rows,
                     )
-    
-                    backup_gradebook_to_google_drive()
-    
-                    save_gradebook_to_google_drive(updated_gradebook)
-    
-                    st.success(f"Saved roster info for {len(new_rows)} students.")
 
+                    backup_gradebook_to_google_drive()
+
+                    save_gradebook_to_google_drive(updated_gradebook)
+
+                    st.success(f"Saved roster info for {len(new_rows)} students.")
 elif view == "Row Editor":
     #st.header("Row Editor")
 
