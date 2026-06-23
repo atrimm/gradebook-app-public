@@ -954,11 +954,11 @@ elif view == "Data Entry":
     
                 roster_info_table = roster_info_table[
                     [
-                        "student_id",
+                        "phone_slot",
                         "last_name",
                         "first_name",
-                        "phone_slot",
                         "pronunciation",
+                        "student_id",
                     ]
                 ]
     
