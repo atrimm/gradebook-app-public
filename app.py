@@ -147,14 +147,24 @@ if view == "Gradebook":
     gradebook_view = semester_grades.merge(
         current_scores_wide,
         on=["student_id", "first_name", "last_name"],
-        how="left"
+        how="left",
     )
 
+    roster_info = gradebook_source.copy()
+
+    if "entry_type" in roster_info.columns:
+        roster_info = roster_info[
+            roster_info["entry_type"] == "roster_info"
+        ]
+
     for extra_column in ["phone_slot", "pronunciation"]:
-        if extra_column in gradebook_source.columns:
+        if extra_column in roster_info.columns:
             extra_values = (
-                gradebook_source[["student_id", extra_column]]
-                .drop_duplicates(subset=["student_id"])
+                roster_info[["student_id", "date", extra_column]]
+                .dropna(subset=[extra_column])
+                .sort_values("date")
+                .drop_duplicates(subset=["student_id"], keep="last")
+                [["student_id", extra_column]]
             )
 
             gradebook_view = gradebook_view.merge(
@@ -164,6 +174,17 @@ if view == "Gradebook":
             )
         else:
             gradebook_view[extra_column] = ""
+
+    gradebook_view["phone_slot"] = pd.to_numeric(
+        gradebook_view["phone_slot"],
+        errors="coerce",
+    )
+
+    gradebook_view["pronunciation"] = (
+        gradebook_view["pronunciation"]
+        .fillna("")
+        .astype(str)
+    )
 
     gradebook_view = gradebook_view.sort_values(
         by=["last_name", "first_name"],
