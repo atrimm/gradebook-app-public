@@ -153,6 +153,9 @@ student_name_row = (
     .iloc[0]
 )
 
+st.caption(
+    f"Viewing as: {'Parent / Guardian' if viewer_role == 'parent' else 'Student'}"
+)
 first_name = student_name_row["first_name"]
 last_name = student_name_row["last_name"]
 student_mod = student_name_row["mod"]
