@@ -161,8 +161,7 @@ last_name = student_name_row["last_name"]
 student_mod = student_name_row["mod"]
 
 st.subheader(f"{first_name} {last_name}")
-st.write(f"**Mod:** {student_mod}")
-st.write(f"**Email:** {test_email}")
+st.write(f"**Mod:** {str(student_mod).replace('Mod ', '')}")
 st.write(f"**Student ID:** {student_id}")
 
 dashboard_data = get_student_dashboard_data(gradebook, student_id)
