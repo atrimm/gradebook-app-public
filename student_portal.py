@@ -153,7 +153,7 @@ student_name_row = (
     .iloc[0]
 )
 
-st.caption(
+st.markdown(
     f"Viewing as: {'Parent / Guardian' if viewer_role == 'parent' else 'Student'}"
 )
 first_name = student_name_row["first_name"]
@@ -178,7 +178,7 @@ general_comments = dashboard_data["general_comments"]
 st.subheader("Semester Grade")
 st.markdown(f"# {semester_grade}")
 
-st.caption(
+st.markdown(
     "This is the current semester grade based on standards assessed so far. "
     "Future assessments, reassessments, and the final exam may change this grade."
 )
