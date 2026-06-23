@@ -213,23 +213,44 @@ st.dataframe(
     hide_index=True,
 )
 
-st.subheader("Course Standards")
+st.subheader("Assessed Standards")
+
+assessed_standards = (
+    gradebook[
+        (gradebook["student_id"] == student_id)
+        & (gradebook["entry_type"] == "assessment")
+    ]["standard"]
+    .dropna()
+    .astype(str)
+    .unique()
+)
+
+assessed_standards = sorted(
+    standard for standard in assessed_standards
+    if standard.strip() != ""
+)
 
 standards_df = pd.DataFrame(
     [
         {
             "Standard": standard,
-            "Description": description,
+            "Description": COURSE_STANDARDS.get(
+                standard,
+                "Description not yet available.",
+            ),
         }
-        for standard, description in COURSE_STANDARDS.items()
+        for standard in assessed_standards
     ]
 )
 
-st.dataframe(
-    standards_df,
-    use_container_width=True,
-    hide_index=True,
-)
+if standards_df.empty:
+    st.info("No standards have been assessed yet.")
+else:
+    st.dataframe(
+        standards_df,
+        use_container_width=True,
+        hide_index=True,
+    )
 
 st.subheader("Semester Grade Determination")
 
