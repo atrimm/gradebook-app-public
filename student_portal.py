@@ -27,7 +27,7 @@ if not st.user.get("is_logged_in", False):
     st.title("Student Grade Portal")
     st.write(
     "Students: Please sign in with your IMSA Google account. ")
-    st.write("Parents: Please sign in with the Google account linked to your email address on file."
+    st.write("Parents / Guardians: Please sign in with the Google account linked to your email address on file."
 )
     
     if st.button("Sign in with Google"):
