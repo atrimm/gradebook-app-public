@@ -950,9 +950,10 @@ elif view == "Data Entry":
                         roster_info_table[col] = ""
 
                 roster_info_table["phone_slot"] = (
-                    roster_info_table["phone_slot"]
-                    .fillna("")
-                    .astype(str)
+                    pd.to_numeric(
+                        roster_info_table["phone_slot"],
+                        errors="coerce",
+                    )
                 )
 
                 roster_info_table["pronunciation"] = (
@@ -979,7 +980,11 @@ elif view == "Data Entry":
                 edited_roster_info = st.data_editor(
                     roster_info_table,
                     column_config={
-                        "phone_slot": st.column_config.TextColumn("Phone Slot"),
+                        "phone_slot": st.column_config.NumberColumn(
+                            "Phone Slot",
+                            min_value=1,
+                            step=1,
+                        ),
                         "last_name": st.column_config.TextColumn(
                             "Last Name",
                             disabled=True,
