@@ -949,8 +949,17 @@ elif view == "Data Entry":
                     else:
                         roster_info_table[col] = ""
 
-                roster_info_table["phone_slot"] = roster_info_table["phone_slot"].fillna("")
-                roster_info_table["pronunciation"] = roster_info_table["pronunciation"].fillna("")
+                roster_info_table["phone_slot"] = (
+                    roster_info_table["phone_slot"]
+                    .fillna("")
+                    .astype(str)
+                )
+
+                roster_info_table["pronunciation"] = (
+                    roster_info_table["pronunciation"]
+                    .fillna("")
+                    .astype(str)
+                )
 
                 roster_info_table = roster_info_table.sort_values(
                     by=["last_name", "first_name"],
@@ -971,10 +980,21 @@ elif view == "Data Entry":
                     roster_info_table,
                     column_config={
                         "phone_slot": st.column_config.TextColumn("Phone Slot"),
-                        "last_name": st.column_config.TextColumn("Last Name", disabled=True),
-                        "first_name": st.column_config.TextColumn("First Name", disabled=True),
-                        "pronunciation": st.column_config.TextColumn("Pronunciation"),
-                        "student_id": st.column_config.TextColumn("Student ID", disabled=True),
+                        "last_name": st.column_config.TextColumn(
+                            "Last Name",
+                            disabled=True,
+                        ),
+                        "first_name": st.column_config.TextColumn(
+                            "First Name",
+                            disabled=True,
+                        ),
+                        "pronunciation": st.column_config.TextColumn(
+                            "Pronunciation"
+                        ),
+                        "student_id": st.column_config.TextColumn(
+                            "Student ID",
+                            disabled=True,
+                        ),
                     },
                     hide_index=True,
                     use_container_width=True,
@@ -1015,7 +1035,11 @@ elif view == "Data Entry":
 
                     save_gradebook_to_google_drive(updated_gradebook)
 
-                    st.success(f"Saved roster info for {len(new_rows)} students.")
+                    st.success(
+                        f"Saved roster info for {len(new_rows)} students."
+                    )
+
+                    
 elif view == "Row Editor":
     #st.header("Row Editor")
 
