@@ -177,7 +177,7 @@ absence_history = dashboard_data["absence_history"]
 general_comments = dashboard_data["general_comments"]
 
 st.info(
-    "PowerSchool is the official grade record. Because PowerSchool is designed primarily for traditional weighted average-based grading, this portal provides more detailed information about progress toward meeting the course standards, score history, comments, progress check eligibility, and the current semester grade."
+    "PowerSchool is the official grade record. Because PowerSchool is designed primarily for grading based on weighted averages, this portal provides more detailed information about progress toward meeting the course standards, score history, comments, progress check eligibility, and the current semester grade."
 )
 
 st.subheader("Semester Grade")
