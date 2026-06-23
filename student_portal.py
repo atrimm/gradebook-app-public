@@ -215,20 +215,17 @@ st.dataframe(
 
 st.subheader("Assessed Standards")
 
-assessed_standards = (
-    gradebook[
-        (gradebook["student_id"] == student_id)
-        & (gradebook["entry_type"] == "assessment")
-    ]["standard"]
-    .dropna()
-    .astype(str)
-    .unique()
-)
+metadata_columns = {
+    "student_id",
+    "first_name",
+    "last_name",
+    "mod",
+}
 
-assessed_standards = sorted(
-    standard for standard in assessed_standards
-    if standard.strip() != ""
-)
+assessed_standards = [
+    col for col in student_current_scores.columns
+    if col not in metadata_columns
+]
 
 standards_df = pd.DataFrame(
     [
