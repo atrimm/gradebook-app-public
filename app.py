@@ -150,12 +150,32 @@ if view == "Gradebook":
         how="left"
     )
 
+    if "pronunciation" in gradebook_source.columns:
+        pronunciations = (
+            gradebook_source[["student_id", "pronunciation"]]
+            .drop_duplicates(subset=["student_id"])
+        )
+
+        gradebook_view = gradebook_view.merge(
+            pronunciations,
+            on="student_id",
+            how="left",
+        )
+    else:
+        gradebook_view["pronunciation"] = ""
+
     gradebook_view = gradebook_view.sort_values(
         by=["last_name", "first_name"],
         ascending=[True, True],
     )
 
-    desired_order = ["last_name", "first_name", "student_id"]
+    desired_order = [
+        "last_name",
+        "first_name",
+        "pronunciation",
+        "student_id",
+    ]
+
     remaining_columns = [
         col for col in gradebook_view.columns
         if col not in desired_order
