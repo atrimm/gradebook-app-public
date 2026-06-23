@@ -150,19 +150,20 @@ if view == "Gradebook":
         how="left"
     )
 
-    if "pronunciation" in gradebook_source.columns:
-        pronunciations = (
-            gradebook_source[["student_id", "pronunciation"]]
-            .drop_duplicates(subset=["student_id"])
-        )
+    for extra_column in ["phone_slot", "pronunciation"]:
+        if extra_column in gradebook_source.columns:
+            extra_values = (
+                gradebook_source[["student_id", extra_column]]
+                .drop_duplicates(subset=["student_id"])
+            )
 
-        gradebook_view = gradebook_view.merge(
-            pronunciations,
-            on="student_id",
-            how="left",
-        )
-    else:
-        gradebook_view["pronunciation"] = ""
+            gradebook_view = gradebook_view.merge(
+                extra_values,
+                on="student_id",
+                how="left",
+            )
+        else:
+            gradebook_view[extra_column] = ""
 
     gradebook_view = gradebook_view.sort_values(
         by=["last_name", "first_name"],
@@ -170,6 +171,7 @@ if view == "Gradebook":
     )
 
     desired_order = [
+        "phone_slot",
         "last_name",
         "first_name",
         "pronunciation",
