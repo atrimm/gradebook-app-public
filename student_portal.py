@@ -6,6 +6,8 @@ import streamlit as st
 
 from grading_config import GRADEBOOK_CSV_PATH, GRADE_THRESHOLDS, GRADING_RUBRIC
 
+from standards import COURSE_STANDARDS
+
 from gradebook_logic import (
     get_student_dashboard_data,
     style_mastery_dataframe,
@@ -207,6 +209,24 @@ rubric_df = make_grading_rubric_dataframe(GRADING_RUBRIC)
 
 st.dataframe(
     rubric_df,
+    use_container_width=True,
+    hide_index=True,
+)
+
+st.subheader("Course Standards")
+
+standards_df = pd.DataFrame(
+    [
+        {
+            "Standard": code,
+            "Description": description,
+        }
+        for code, description in COURSE_STANDARDS.items()
+    ]
+)
+
+st.dataframe(
+    standards_df,
     use_container_width=True,
     hide_index=True,
 )
